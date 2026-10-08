@@ -126,6 +126,3 @@ Hotel Room (Dirty → Cleaning → Clean)
 ## License
 
 MIT
-# hotel_pms
-# hotel_pms
-# hotel_pms

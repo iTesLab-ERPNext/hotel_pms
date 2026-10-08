@@ -1,0 +1,9 @@
+{
+  "name": "hotel_pms",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "echo 'no frontend build required for hotel_pms'"
+  },
+  "devDependencies": {}
+}
