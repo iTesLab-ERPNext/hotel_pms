@@ -1,11 +1,9 @@
 {
  "category": "Modules",
  "charts": [],
- "content": "[]",
- "creation": "2026-10-08 00:00:00.000000",
- "doctype": "Workspace",
+ "content": "[{\"id\":\"shortcut-section\",\"type\":\"shortcut\"},{\"id\":\"card-masters\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\"}},{\"id\":\"card-operations\",\"type\":\"card\",\"data\":{\"card_name\":\"Operations\"}}]",
  "hide_custom": 0,
- "is_hidden": 1,
+ "is_hidden": 0,
  "label": "Hotel PMS",
  "links": [
   {
@@ -79,8 +77,6 @@
    "link_to": "Hotel Housekeeping"
   }
  ],
- "modified": "2026-10-08 00:00:00.000000",
- "modified_by": "Administrator",
  "module": "Hotel",
  "name": "Hotel PMS",
  "owner": "Administrator",
@@ -117,14 +113,6 @@
    "type": "Page"
   },
   {
-   "color": "Blue",
-   "format": "{} Active",
-   "label": "Active Stays",
-   "link_to": "Hotel Stay",
-   "stats_filter": "{\"status\": \"Active\"}",
-   "type": "DocType"
-  },
-  {
    "color": "Green",
    "format": "{} Available",
    "label": "Available Rooms",
@@ -141,9 +129,17 @@
    "type": "DocType"
   },
   {
+   "color": "Blue",
+   "format": "{} Active",
+   "label": "Active Stays",
+   "link_to": "Hotel Stay",
+   "stats_filter": "{\"status\": \"Active\"}",
+   "type": "DocType"
+  },
+  {
    "color": "Red",
    "format": "{} Open",
-   "label": "Folios",
+   "label": "Open Folios",
    "link_to": "Hotel Folio",
    "stats_filter": "{\"status\": [\"in\", [\"Open\", \"Partially Paid\"]]}",
    "type": "DocType"

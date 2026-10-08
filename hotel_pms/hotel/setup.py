@@ -46,6 +46,32 @@ SERVICES = [
     {"service_name": "Other",         "code": "OTH"},
 ]
 
+# Demo rooms: (room_number, room_name, room_type, floor, capacity, base_rate, status)
+DEMO_ROOMS = [
+    ("101", "Standard Single 101",  "Single",  1, 1,  800,  "Available"),
+    ("102", "Standard Single 102",  "Single",  1, 1,  800,  "Available"),
+    ("103", "Double Room 103",      "Double",  1, 2,  1200, "Available"),
+    ("104", "Twin Room 104",        "Twin",    1, 2,  1200, "Available"),
+    ("105", "Double Room 105",      "Double",  1, 2,  1200, "Available"),
+    ("201", "Family Suite 201",     "Family",  2, 4,  2000, "Available"),
+    ("202", "Deluxe Double 202",    "Deluxe",  2, 2,  1800, "Available"),
+    ("203", "Deluxe Double 203",    "Deluxe",  2, 2,  1800, "Available"),
+    ("204", "Triple Room 204",      "Triple",  2, 3,  1600, "Available"),
+    ("301", "Junior Suite 301",     "Suite",   3, 2,  3000, "Available"),
+    ("302", "Senior Suite 302",     "Suite",   3, 3,  4000, "Available"),
+    ("401", "Presidential Villa",   "Villa",   4, 4,  8000, "Available"),
+]
+
+# Demo customers: (full_name, email, phone, nationality, customer_category)
+DEMO_CUSTOMERS = [
+    ("Ahmed Ben Ali",       "ahmed.benali@email.com",   "+216 20 000 001", "Tunisian",  "Individual"),
+    ("Marie Dupont",        "marie.dupont@email.com",   "+33 6 00 00 00 01","French",   "Individual"),
+    ("John Smith",          "john.smith@email.com",     "+44 7700 000001",  "British",  "Individual"),
+    ("Fatima Al-Hassan",    "fatima.hassan@email.com",  "+966 50 000 0001", "Saudi",    "VIP"),
+    ("Carlos Rodriguez",    "carlos.rodriguez@corp.com","+34 600 000 001",  "Spanish",  "Corporate"),
+    ("Global Travel Agency","gta@globaltravel.com",     "+1 212 000 0001",  "American", "Agency"),
+]
+
 # ── Helpers ────────────────────────────────────────────────────────────────────
 
 def _insert(data: dict) -> None:
@@ -138,9 +164,52 @@ def before_uninstall() -> None:
     frappe.db.commit()
 
 
+def ensure_demo_rooms() -> None:
+    """Seed demo Hotel Room records — skipped if any room already exists."""
+    if frappe.db.count("Hotel Room") > 0:
+        return  # Don't overwrite if operator has added their own rooms
+
+    for (num, name, rtype, floor, cap, rate, status) in DEMO_ROOMS:
+        if not frappe.db.exists("Hotel Room", {"room_number": num}):
+            _insert({
+                "doctype": "Hotel Room",
+                "room_number": num,
+                "room_name": name,
+                "room_type": rtype,
+                "floor": floor,
+                "capacity": cap,
+                "base_rate": rate,
+                "status": status,
+                "housekeeping_status": "Clean",
+                "active": 1,
+            })
+    frappe.logger().info("Hotel PMS: demo rooms created")
+
+
+def ensure_demo_customers() -> None:
+    """Seed demo Hotel Customer records — skipped if any customer already exists."""
+    if frappe.db.count("Hotel Customer") > 0:
+        return
+
+    for (name, email, phone, nationality, category) in DEMO_CUSTOMERS:
+        if not frappe.db.exists("Hotel Customer", {"email": email}):
+            _insert({
+                "doctype": "Hotel Customer",
+                "full_name": name,
+                "email": email,
+                "mobile": phone,
+                "nationality": nationality,
+                "customer_category": category,
+                "active": 1,
+            })
+    frappe.logger().info("Hotel PMS: demo customers created")
+
+
 def run() -> None:
     """Full setup — called from after_migrate."""
     ensure_module_def()
     ensure_roles()
     ensure_masters()
+    ensure_demo_rooms()
+    ensure_demo_customers()
     frappe.db.commit()
