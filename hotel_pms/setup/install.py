@@ -85,11 +85,16 @@ def sync_workspace():
         ws_data = json.load(f)
 
     ws_data["doctype"] = "Workspace"
+    # Strip timestamp/owner fields so Frappe's optimistic locking doesn't reject
+    # the save when the DB record is newer than the JSON file.
+    for field in ("modified", "modified_by", "creation", "owner"):
+        ws_data.pop(field, None)
 
     if frappe.db.exists("Workspace", "Hotel PMS"):
         doc = frappe.get_doc("Workspace", "Hotel PMS")
         doc.update(ws_data)
         doc.flags.ignore_permissions = True
+        doc.flags.ignore_version = True
         doc.save()
         print("  Updated workspace: Hotel PMS")
     else:
