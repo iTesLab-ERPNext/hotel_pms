@@ -1,110 +1,64 @@
+"""
+hotel_pms.setup.install
+~~~~~~~~~~~~~~~~~~~~~~~
+Frappe lifecycle hooks wired up in hooks.py.
+Keeps business logic out of here — delegates to hotel.setup.
+"""
 import json
 import os
 import frappe
 
 
 def after_install():
-    """Runs immediately after the app is installed.
-    Keep this minimal — DocType tables are NOT yet created at this point.
-    Only create Role records (which use existing Frappe DocTypes).
+    """Runs immediately after bench install-app.
+    DocType tables do NOT exist yet — only create Role records.
     """
-    create_roles()
-    print("Hotel PMS installed successfully. Run 'bench migrate' to complete setup.")
+    from hotel_pms.hotel.setup import ensure_roles
+    ensure_roles()
+    print("Hotel PMS installed. Run 'bench migrate' to complete setup.")
+
+
+def before_migrate():
+    """Clear module cache so Frappe picks up any changed DocType/module metadata."""
+    from hotel_pms.compat import clear_module_cache
+    clear_module_cache()
 
 
 def after_migrate():
-    """Runs after every 'bench migrate'.
-    All DocType tables exist by this point, so it's safe to insert records.
-    """
-    ensure_module_def()
-    create_default_categories()
-    sync_workspace()
-    frappe.db.commit()
-    print("Hotel PMS default data ready.")
+    """Runs after every bench migrate — all tables exist at this point."""
+    from hotel_pms.hotel import setup as hotel_setup
+    hotel_setup.run()
+    _sync_workspace()
+    print("Hotel PMS: default data ready.")
 
 
-def create_roles():
-    for role in ["Hotel Manager", "Front Desk", "Housekeeping", "Cashier"]:
-        if not frappe.db.exists("Role", role):
-            frappe.get_doc({"doctype": "Role", "role_name": role}).insert(ignore_permissions=True)
-            print(f"  Created role: {role}")
+def before_uninstall():
+    from hotel_pms.hotel.setup import before_uninstall as _bu
+    _bu()
 
 
-def ensure_module_def():
-    """Guarantee the 'Hotel' Module Def exists before inserting any Hotel DocType records.
+# ── Workspace sync ─────────────────────────────────────────────────────────────
 
-    bench migrate normally creates Module Def entries from modules.txt, but on sites
-    that already have other apps (e.g. ERPNext) the sync can happen after after_migrate
-    fires, causing 'Module Hotel not found'. Creating it here is idempotent and safe.
-    """
-    if not frappe.db.exists("Module Def", "Hotel"):
-        frappe.get_doc({
-            "doctype": "Module Def",
-            "module_name": "Hotel",
-            "app_name": "hotel_pms",
-        }).insert(ignore_permissions=True)
-        frappe.db.commit()
-        print("  Created Module Def: Hotel")
+def _sync_workspace():
+    """Explicitly upsert the Hotel PMS workspace from its JSON file.
 
-
-def create_default_categories():
-    """Create seed data for lookup tables. Safe to call multiple times."""
-    for cat in ["Individual", "Family", "Corporate", "VIP", "Agency", "Group"]:
-        if not frappe.db.exists("Hotel Customer Category", cat):
-            frappe.get_doc({
-                "doctype": "Hotel Customer Category",
-                "customer_category": cat,
-                "active": 1
-            }).insert(ignore_permissions=True)
-
-    for ft in ["Single", "Couple", "Family", "Large Family", "Group"]:
-        if not frappe.db.exists("Hotel Family Type", ft):
-            frappe.get_doc({
-                "doctype": "Hotel Family Type",
-                "family_type": ft,
-                "active": 1
-            }).insert(ignore_permissions=True)
-
-    for rt in ["Single", "Double", "Twin", "Triple", "Family", "Suite", "Deluxe", "Villa"]:
-        if not frappe.db.exists("Hotel Room Type", rt):
-            frappe.get_doc({
-                "doctype": "Hotel Room Type",
-                "room_type": rt,
-                "code": rt[:3].upper(),
-                "active": 1
-            }).insert(ignore_permissions=True)
-
-    for svc in ["Breakfast", "Lunch", "Dinner", "Restaurant", "Spa",
-                "Horse Riding", "Transport", "Laundry", "Extra Bed", "Other"]:
-        if not frappe.db.exists("Hotel Service", svc):
-            frappe.get_doc({
-                "doctype": "Hotel Service",
-                "service_name": svc,
-                "code": svc[:3].upper(),
-                "active": 1
-            }).insert(ignore_permissions=True)
-
-
-def sync_workspace():
-    """Explicitly import the Hotel PMS workspace from JSON.
-
-    bench migrate doesn't always auto-sync workspace files in v15, so we do it
-    here to guarantee the workspace is present after every migrate.
+    bench migrate in Frappe v15 does not always auto-sync workspace files,
+    so we do it here after every migrate.
     """
     ws_path = os.path.join(
         frappe.get_app_path("hotel_pms"),
-        "hotel", "workspace", "hotel_pms", "hotel_pms.json"
+        "hotel", "workspace", "hotel_pms", "hotel_pms.json",
     )
     if not os.path.exists(ws_path):
-        print("  WARNING: workspace JSON not found, skipping workspace sync")
+        print("  WARNING: workspace JSON not found — skipping workspace sync")
         return
 
     with open(ws_path) as f:
         ws_data = json.load(f)
 
     ws_data["doctype"] = "Workspace"
-    # Strip timestamp/owner fields so Frappe's optimistic locking doesn't reject
-    # the save when the DB record is newer than the JSON file.
+    # Strip timestamp/owner fields so optimistic locking never rejects the save
+    # when the DB record is newer than the static JSON file.
     for field in ("modified", "modified_by", "creation", "owner"):
         ws_data.pop(field, None)
 

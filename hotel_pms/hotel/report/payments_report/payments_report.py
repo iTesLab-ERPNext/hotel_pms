@@ -1,39 +1,39 @@
+"""Payments Report — payment transactions for a date range."""
 import frappe
-from frappe.utils import nowdate, add_days
+from hotel_pms.hotel.report_utils import col, summary, normalize_dates
 
 
 def execute(filters=None):
     filters = filters or {}
-    columns = get_columns()
-    data = get_data(filters)
-    return columns, data
+    from_date, to_date = normalize_dates(filters, default_days=30)
+    columns = _columns()
+    rows = _data(from_date, to_date, filters)
+
+    total = sum(r["amount"] for r in rows)
+    report_summary = [
+        summary(total,     "Total Collected", "Currency", "Green" if total > 0 else "Grey"),
+        summary(len(rows), "Transactions",    "Int"),
+    ]
+    return columns, rows, None, None, report_summary
 
 
-def get_columns():
+def _columns():
     return [
-        {"label": "Payment", "fieldname": "name", "fieldtype": "Link", "options": "Hotel Payment", "width": 120},
-        {"label": "Date", "fieldname": "payment_date", "fieldtype": "Date", "width": 100},
-        {"label": "Customer", "fieldname": "customer_name", "fieldtype": "Data", "width": 160},
-        {"label": "Reservation", "fieldname": "reservation", "fieldtype": "Link", "options": "Hotel Reservation", "width": 130},
-        {"label": "Folio", "fieldname": "folio", "fieldtype": "Link", "options": "Hotel Folio", "width": 110},
-        {"label": "Payment Type", "fieldname": "payment_type", "fieldtype": "Data", "width": 110},
-        {"label": "Method", "fieldname": "payment_method", "fieldtype": "Data", "width": 120},
-        {"label": "Amount", "fieldname": "amount", "fieldtype": "Currency", "width": 110},
-        {"label": "Reference", "fieldname": "reference", "fieldtype": "Data", "width": 130},
-        {"label": "Status", "fieldname": "status", "fieldtype": "Data", "width": 90},
+        col("name",           "Payment",        "Link",     options="Hotel Payment", width=130),
+        col("payment_date",   "Date",           "Date",     width=100),
+        col("customer_name",  "Customer",       "Data",     width=160),
+        col("payment_type",   "Type",           "Data",     width=100),
+        col("payment_method", "Method",         "Data",     width=110),
+        col("amount",         "Amount",         "Currency", width=110),
+        col("reference",      "Reference",      "Data",     width=130),
+        col("folio",          "Folio",          "Link",     options="Hotel Folio", width=130),
     ]
 
 
-def get_data(filters):
-    conditions = ""
-    args = {}
+def _data(from_date, to_date, filters):
+    conditions = "p.payment_date BETWEEN %(from_date)s AND %(to_date)s"
+    args = {"from_date": str(from_date), "to_date": str(to_date)}
 
-    if filters.get("from_date"):
-        conditions += " AND p.payment_date >= %(from_date)s"
-        args["from_date"] = filters["from_date"]
-    if filters.get("to_date"):
-        conditions += " AND p.payment_date <= %(to_date)s"
-        args["to_date"] = filters["to_date"]
     if filters.get("payment_method"):
         conditions += " AND p.payment_method = %(payment_method)s"
         args["payment_method"] = filters["payment_method"]
@@ -41,26 +41,11 @@ def get_data(filters):
         conditions += " AND p.customer = %(customer)s"
         args["customer"] = filters["customer"]
 
-    rows = frappe.db.sql("""
-        SELECT
-            p.name,
-            p.payment_date,
-            hc.full_name as customer_name,
-            p.reservation,
-            p.folio,
-            p.payment_type,
-            p.payment_method,
-            p.amount,
-            p.reference,
-            CASE p.docstatus
-                WHEN 0 THEN 'Draft'
-                WHEN 1 THEN 'Submitted'
-                WHEN 2 THEN 'Cancelled'
-            END as status
+    return frappe.db.sql("""
+        SELECT p.name, p.payment_date, hc.full_name as customer_name,
+               p.payment_type, p.payment_method, p.amount, p.reference, p.folio
         FROM `tabHotel Payment` p
         LEFT JOIN `tabHotel Customer` hc ON hc.name = p.customer
-        WHERE 1=1 {conditions}
+        WHERE p.docstatus != 2 AND {conditions}
         ORDER BY p.payment_date DESC, p.name DESC
     """.format(conditions=conditions), args, as_dict=True)
-
-    return rows

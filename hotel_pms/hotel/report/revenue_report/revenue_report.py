@@ -1,70 +1,72 @@
+"""Revenue Report — daily revenue breakdown for a date range."""
 import frappe
-from frappe.utils import nowdate, add_days, getdate
 from datetime import timedelta
+from hotel_pms.hotel.report_utils import col, summary, normalize_dates
 
 
 def execute(filters=None):
     filters = filters or {}
-    columns = get_columns()
-    data = get_data(filters)
-    return columns, data
+    from_date, to_date = normalize_dates(filters, default_days=30)
+    columns = _columns()
+    rows, report_summary = _data(from_date, to_date)
+    return columns, rows, None, None, report_summary
 
 
-def get_columns():
+def _columns():
     return [
-        {"label": "Date", "fieldname": "date", "fieldtype": "Date", "width": 110},
-        {"label": "Room Revenue", "fieldname": "room_revenue", "fieldtype": "Currency", "width": 130},
-        {"label": "Service Revenue", "fieldname": "service_revenue", "fieldtype": "Currency", "width": 130},
-        {"label": "Total Revenue", "fieldname": "total_revenue", "fieldtype": "Currency", "width": 130},
-        {"label": "Payments Received", "fieldname": "payments", "fieldtype": "Currency", "width": 150},
-        {"label": "Folios Count", "fieldname": "folio_count", "fieldtype": "Int", "width": 110},
+        col("date",          "Date",            "Date",     width=110),
+        col("room_revenue",  "Room Revenue",    "Currency", width=130),
+        col("service_rev",   "Service Revenue", "Currency", width=140),
+        col("total_revenue", "Total Revenue",   "Currency", width=130),
+        col("payments",      "Payments",        "Currency", width=120),
+        col("outstanding",   "Outstanding",     "Currency", width=120),
     ]
 
 
-def get_data(filters):
-    from_date = getdate(filters.get("from_date") or add_days(nowdate(), -30))
-    to_date = getdate(filters.get("to_date") or nowdate())
-
-    data = []
+def _data(from_date, to_date):
+    rows = []
     current = from_date
+    grand_total = 0
+
     while current <= to_date:
         date_str = str(current)
 
-        charges = frappe.db.sql("""
-            SELECT
-                fi.charge_type,
-                COALESCE(SUM(fi.amount), 0) as total
+        room_rev = frappe.db.sql("""
+            SELECT COALESCE(SUM(fi.amount), 0)
             FROM `tabHotel Folio Item` fi
-            WHERE fi.date = %s
-            GROUP BY fi.charge_type
-        """, date_str, as_dict=True)
+            JOIN `tabHotel Folio` f ON f.name = fi.parent
+            WHERE fi.charge_type = 'Room' AND fi.date = %s
+        """, date_str)[0][0] or 0
 
-        room_rev = sum(c.total for c in charges if c.charge_type == "Room")
-        service_rev = sum(c.total for c in charges if c.charge_type != "Room")
-        total_rev = room_rev + service_rev
+        service_rev = frappe.db.sql("""
+            SELECT COALESCE(SUM(fi.amount), 0)
+            FROM `tabHotel Folio Item` fi
+            JOIN `tabHotel Folio` f ON f.name = fi.parent
+            WHERE fi.charge_type != 'Room' AND fi.date = %s
+        """, date_str)[0][0] or 0
 
         payments = frappe.db.sql("""
-            SELECT COALESCE(SUM(amount), 0) as total
+            SELECT COALESCE(SUM(amount), 0)
             FROM `tabHotel Payment`
-            WHERE payment_date = %s AND docstatus = 1
-        """, date_str, as_dict=True)[0].total or 0
+            WHERE payment_date = %s AND docstatus != 2
+        """, date_str)[0][0] or 0
 
-        folio_count = frappe.db.sql("""
-            SELECT COUNT(DISTINCT fi.parent) as cnt
-            FROM `tabHotel Folio Item` fi
-            WHERE fi.date = %s
-        """, date_str, as_dict=True)[0].cnt or 0
+        total_rev  = float(room_rev) + float(service_rev)
+        outstanding = total_rev - float(payments)
+        grand_total += total_rev
 
-        if total_rev > 0 or float(payments) > 0:
-            data.append({
-                "date": current,
-                "room_revenue": room_rev,
-                "service_revenue": service_rev,
-                "total_revenue": total_rev,
-                "payments": float(payments),
-                "folio_count": folio_count,
-            })
-
+        rows.append({
+            "date":          current,
+            "room_revenue":  float(room_rev),
+            "service_rev":   float(service_rev),
+            "total_revenue": total_rev,
+            "payments":      float(payments),
+            "outstanding":   outstanding,
+        })
         current += timedelta(days=1)
 
-    return data
+    report_summary = [
+        summary(grand_total, "Total Revenue", "Currency",
+                "Green" if grand_total > 0 else "Grey"),
+    ]
+    return rows, report_summary

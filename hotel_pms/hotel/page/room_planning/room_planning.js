@@ -68,7 +68,7 @@ class RoomPlanning {
 
 	refresh() {
 		frappe.call({
-			method: "hotel_pms.api.hotel_api.get_planning_board",
+			method: "hotel_pms.hotel.api.get_planning_board",
 			args: { from_date: this.from_date, days: this.days },
 			callback: (r) => {
 				if (r.message) {

@@ -1,30 +1,34 @@
+"""Reservations Report — filterable list of all reservations."""
 import frappe
-from frappe.utils import nowdate, add_days
+from hotel_pms.hotel.report_utils import col, summary
 
 
 def execute(filters=None):
     filters = filters or {}
-    columns = get_columns()
-    data = get_data(filters)
-    return columns, data
+    columns = _columns()
+    rows = _data(filters)
+    report_summary = [
+        summary(len(rows), "Total Reservations", "Int"),
+    ]
+    return columns, rows, None, None, report_summary
 
 
-def get_columns():
+def _columns():
     return [
-        {"label": "Reservation", "fieldname": "name", "fieldtype": "Link", "options": "Hotel Reservation", "width": 130},
-        {"label": "Customer", "fieldname": "customer_name", "fieldtype": "Data", "width": 160},
-        {"label": "Booking Date", "fieldname": "booking_date", "fieldtype": "Date", "width": 110},
-        {"label": "Arrival", "fieldname": "arrival_date", "fieldtype": "Date", "width": 100},
-        {"label": "Departure", "fieldname": "departure_date", "fieldtype": "Date", "width": 100},
-        {"label": "Nights", "fieldname": "number_of_nights", "fieldtype": "Int", "width": 70},
-        {"label": "Adults", "fieldname": "total_adults", "fieldtype": "Int", "width": 70},
-        {"label": "Children", "fieldname": "total_children", "fieldtype": "Int", "width": 80},
-        {"label": "Status", "fieldname": "status", "fieldtype": "Data", "width": 110},
-        {"label": "Package", "fieldname": "package", "fieldtype": "Link", "options": "Hotel Package", "width": 120},
+        col("name",             "Reservation",  "Link",    options="Hotel Reservation", width=130),
+        col("customer_name",    "Customer",     "Data",    width=160),
+        col("booking_date",     "Booking Date", "Date",    width=110),
+        col("arrival_date",     "Arrival",      "Date",    width=100),
+        col("departure_date",   "Departure",    "Date",    width=100),
+        col("number_of_nights", "Nights",       "Int",     width=70),
+        col("total_adults",     "Adults",       "Int",     width=70),
+        col("total_children",   "Children",     "Int",     width=80),
+        col("status",           "Status",       "Data",    width=110),
+        col("package",          "Package",      "Link",    options="Hotel Package", width=120),
     ]
 
 
-def get_data(filters):
+def _data(filters):
     conditions = ""
     args = {}
 
@@ -42,17 +46,10 @@ def get_data(filters):
         args["customer"] = filters["customer"]
 
     return frappe.db.sql("""
-        SELECT
-            r.name,
-            hc.full_name as customer_name,
-            r.booking_date,
-            r.arrival_date,
-            r.departure_date,
-            r.number_of_nights,
-            r.total_adults,
-            r.total_children,
-            r.status,
-            r.package
+        SELECT r.name, hc.full_name as customer_name,
+               r.booking_date, r.arrival_date, r.departure_date,
+               r.number_of_nights, r.total_adults, r.total_children,
+               r.status, r.package
         FROM `tabHotel Reservation` r
         LEFT JOIN `tabHotel Customer` hc ON hc.name = r.customer
         WHERE 1=1 {conditions}

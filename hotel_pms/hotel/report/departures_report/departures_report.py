@@ -1,66 +1,54 @@
+"""Departures Report — guests expected to check out on a given date."""
 import frappe
 from frappe.utils import nowdate
+from hotel_pms.hotel.report_utils import col, summary
 
 
 def execute(filters=None):
     filters = filters or {}
-    columns = get_columns()
-    data = get_data(filters)
-    return columns, data
+    date = filters.get("date") or nowdate()
+    columns = _columns()
+    rows = _data(date, filters)
+    report_summary = [
+        summary(len(rows), "Total Departures", "Int"),
+    ]
+    return columns, rows, None, None, report_summary
 
 
-def get_columns():
+def _columns():
     return [
-        {"label": "Reservation", "fieldname": "reservation", "fieldtype": "Link", "options": "Hotel Reservation", "width": 130},
-        {"label": "Stay", "fieldname": "stay", "fieldtype": "Link", "options": "Hotel Stay", "width": 110},
-        {"label": "Customer", "fieldname": "customer_name", "fieldtype": "Data", "width": 160},
-        {"label": "Phone", "fieldname": "phone", "fieldtype": "Data", "width": 120},
-        {"label": "Room", "fieldname": "room", "fieldtype": "Link", "options": "Hotel Room", "width": 100},
-        {"label": "Check-in Date", "fieldname": "checkin_date", "fieldtype": "Datetime", "width": 140},
-        {"label": "Expected Checkout", "fieldname": "expected_checkout", "fieldtype": "Date", "width": 130},
-        {"label": "Folio", "fieldname": "folio", "fieldtype": "Link", "options": "Hotel Folio", "width": 110},
-        {"label": "Total Charges", "fieldname": "total_charges", "fieldtype": "Currency", "width": 120},
-        {"label": "Total Payments", "fieldname": "total_payments", "fieldtype": "Currency", "width": 120},
-        {"label": "Balance", "fieldname": "balance", "fieldtype": "Currency", "width": 100},
-        {"label": "Folio Status", "fieldname": "folio_status", "fieldtype": "Data", "width": 110},
+        col("stay",          "Stay",        "Link",  options="Hotel Stay",        width=130),
+        col("reservation",   "Reservation", "Link",  options="Hotel Reservation", width=130),
+        col("customer_name", "Guest",       "Data",  width=160),
+        col("room",          "Room",        "Link",  options="Hotel Room",        width=100),
+        col("room_type",     "Room Type",   "Data",  width=110),
+        col("checkin_date",  "Checked In",  "Datetime", width=140),
+        col("status",        "Stay Status", "Data",  width=110),
+        col("folio_balance", "Balance",     "Currency", width=110),
     ]
 
 
-def get_data(filters):
-    date = filters.get("date") or nowdate()
+def _data(date, filters):
+    conditions = "r.departure_date = %(date)s"
+    args = {"date": date}
 
-    stays = frappe.db.sql("""
-        SELECT
-            s.name as stay,
-            s.reservation,
-            s.room,
-            s.checkin_date,
-            s.expected_checkout,
-            hc.full_name as customer_name,
-            hc.phone
+    if filters.get("status"):
+        conditions += " AND s.status = %(status)s"
+        args["status"] = filters["status"]
+    else:
+        conditions += " AND s.status IN ('Active', 'Checked Out')"
+
+    return frappe.db.sql("""
+        SELECT s.name as stay, s.reservation,
+               hc.full_name as customer_name,
+               s.room, hr.room_type,
+               s.checkin_date, s.status,
+               COALESCE(f.balance, 0) as folio_balance
         FROM `tabHotel Stay` s
+        JOIN `tabHotel Reservation` r ON r.name = s.reservation
         LEFT JOIN `tabHotel Customer` hc ON hc.name = s.customer
-        WHERE s.status = 'Active'
-          AND s.expected_checkout = %(date)s
-        ORDER BY s.room
-    """, {"date": date}, as_dict=True)
-
-    for stay in stays:
-        folio = frappe.db.get_value("Hotel Folio",
-            {"stay": stay.stay},
-            ["name", "total_charges", "total_payments", "balance", "status"],
-            as_dict=True)
-        if folio:
-            stay["folio"] = folio.name
-            stay["total_charges"] = folio.total_charges
-            stay["total_payments"] = folio.total_payments
-            stay["balance"] = folio.balance
-            stay["folio_status"] = folio.status
-        else:
-            stay["folio"] = None
-            stay["total_charges"] = 0
-            stay["total_payments"] = 0
-            stay["balance"] = 0
-            stay["folio_status"] = "No Folio"
-
-    return stays
+        LEFT JOIN `tabHotel Room` hr ON hr.name = s.room
+        LEFT JOIN `tabHotel Folio` f ON f.stay = s.name
+        WHERE {conditions}
+        ORDER BY s.name
+    """.format(conditions=conditions), args, as_dict=True)

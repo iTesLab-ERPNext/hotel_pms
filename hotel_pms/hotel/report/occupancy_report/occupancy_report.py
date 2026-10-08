@@ -1,45 +1,48 @@
+"""Occupancy Report — daily occupancy rates for a date range."""
 import frappe
-from frappe.utils import getdate, add_days, nowdate
 from datetime import timedelta
+from hotel_pms.hotel.report_utils import col, summary, indicator_for_occupancy, normalize_dates
 
 
 def execute(filters=None):
     filters = filters or {}
-    from_date = getdate(filters.get("from_date") or add_days(nowdate(), -30))
-    to_date = getdate(filters.get("to_date") or nowdate())
+    from_date, to_date = normalize_dates(filters, default_days=30)
 
-    columns = get_columns()
-    data = get_data(from_date, to_date)
-    return columns, data
+    columns = _columns()
+    rows, report_summary = _data(from_date, to_date)
+    return columns, rows, None, None, report_summary
 
 
-def get_columns():
+def _columns():
     return [
-        {"label": "Date", "fieldname": "date", "fieldtype": "Date", "width": 110},
-        {"label": "Total Rooms", "fieldname": "total_rooms", "fieldtype": "Int", "width": 110},
-        {"label": "Occupied", "fieldname": "occupied", "fieldtype": "Int", "width": 100},
-        {"label": "Reserved", "fieldname": "reserved", "fieldtype": "Int", "width": 100},
-        {"label": "Available", "fieldname": "available", "fieldtype": "Int", "width": 100},
-        {"label": "Maintenance", "fieldname": "maintenance", "fieldtype": "Int", "width": 110},
-        {"label": "Occupancy %", "fieldname": "occupancy_pct", "fieldtype": "Percent", "width": 120},
+        col("date",          "Date",         "Date",    width=110),
+        col("total_rooms",   "Total Rooms",  "Int",     width=110),
+        col("occupied",      "Occupied",     "Int",     width=100),
+        col("reserved",      "Reserved",     "Int",     width=100),
+        col("available",     "Available",    "Int",     width=100),
+        col("maintenance",   "Maintenance",  "Int",     width=110),
+        col("occupancy_pct", "Occupancy %",  "Percent", width=120),
     ]
 
 
-def get_data(from_date, to_date):
+def _data(from_date, to_date):
     total_rooms = frappe.db.count("Hotel Room", {"active": 1})
     if not total_rooms:
-        return []
+        return [], []
 
-    data = []
+    rows = []
     current = from_date
+    total_occ = 0
+    days = 0
+
     while current <= to_date:
         date_str = str(current)
 
         occupied = frappe.db.sql("""
-            SELECT COUNT(DISTINCT s.room) FROM `tabHotel Stay` s
-            WHERE s.status = 'Active'
-              AND DATE(s.checkin_date) <= %s
-              AND (s.expected_checkout > %s OR s.expected_checkout IS NULL)
+            SELECT COUNT(DISTINCT room) FROM `tabHotel Stay`
+            WHERE status = 'Active'
+              AND DATE(checkin_date) <= %s
+              AND (expected_checkout > %s OR expected_checkout IS NULL)
         """, (date_str, date_str))[0][0] or 0
 
         reserved = frappe.db.sql("""
@@ -47,25 +50,33 @@ def get_data(from_date, to_date):
             FROM `tabHotel Reservation Room` rr
             JOIN `tabHotel Reservation` r ON r.name = rr.parent
             WHERE r.status = 'Confirmed'
-              AND r.arrival_date <= %s
-              AND r.departure_date > %s
+              AND r.arrival_date <= %s AND r.departure_date > %s
         """, (date_str, date_str))[0][0] or 0
 
-        maintenance = frappe.db.count("Hotel Room", {"status": ["in", ["Maintenance", "Blocked", "Out of Service"]]})
+        maintenance = frappe.db.count(
+            "Hotel Room", {"status": ["in", ["Maintenance", "Blocked", "Out of Service"]]})
 
-        available = max(0, total_rooms - occupied - reserved - maintenance)
+        available    = max(0, total_rooms - occupied - reserved - maintenance)
         occupancy_pct = round((occupied / total_rooms) * 100, 1) if total_rooms else 0
 
-        data.append({
-            "date": current,
-            "total_rooms": total_rooms,
-            "occupied": occupied,
-            "reserved": reserved,
-            "available": available,
-            "maintenance": maintenance,
+        rows.append({
+            "date":          current,
+            "total_rooms":   total_rooms,
+            "occupied":      occupied,
+            "reserved":      reserved,
+            "available":     available,
+            "maintenance":   maintenance,
             "occupancy_pct": occupancy_pct,
         })
 
+        total_occ += occupancy_pct
+        days += 1
         current += timedelta(days=1)
 
-    return data
+    avg_occ = round(total_occ / days, 1) if days else 0
+    report_summary = [
+        summary(avg_occ,     "Avg Occupancy %", "Percent",
+                indicator_for_occupancy(avg_occ)),
+        summary(total_rooms, "Total Rooms",     "Int"),
+    ]
+    return rows, report_summary

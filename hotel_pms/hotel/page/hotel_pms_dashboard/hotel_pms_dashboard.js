@@ -101,7 +101,7 @@ class HotelDashboard {
 
 	refresh() {
 		frappe.call({
-			method: "hotel_pms.api.hotel_api.get_dashboard_data",
+			method: "hotel_pms.hotel.api.get_dashboard_data",
 			callback: (r) => {
 				if (r.message) {
 					this.render(r.message);
