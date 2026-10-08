@@ -88,23 +88,6 @@ def ensure_roles() -> None:
             frappe.logger().info(f"Hotel PMS: created role {role!r}")
 
 
-def ensure_module_def() -> None:
-    """Guarantee 'Hotel' Module Def exists before any Hotel DocType records are inserted.
-
-    bench migrate normally creates Module Def entries from modules.txt, but on sites
-    that already have other apps (e.g. ERPNext) the sync can happen after after_migrate
-    fires.  Creating it here is idempotent and safe.
-    """
-    if not frappe.db.exists("Module Def", "Hotel"):
-        _insert({
-            "doctype": "Module Def",
-            "module_name": "Hotel",
-            "app_name": "hotel_pms",
-        })
-        frappe.db.commit()
-        frappe.logger().info("Hotel PMS: created Module Def 'Hotel'")
-
-
 def ensure_masters() -> None:
     """Seed lookup tables — idempotent."""
     for cat in CUSTOMER_CATEGORIES:
@@ -207,7 +190,6 @@ def ensure_demo_customers() -> None:
 
 def run() -> None:
     """Full setup — called from after_migrate."""
-    ensure_module_def()
     ensure_roles()
     ensure_masters()
     ensure_demo_rooms()
