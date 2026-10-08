@@ -33,8 +33,9 @@ website_route_rules = []
 # Scheduled tasks
 scheduler_events = {}
 
-# after_install hook
+# Lifecycle hooks
 after_install = "hotel_pms.setup.install.after_install"
+after_migrate = "hotel_pms.setup.install.after_migrate"
 
 # Bundle JS/CSS (required so Frappe's esbuild doesn't get an undefined path)
 app_include_js = []
