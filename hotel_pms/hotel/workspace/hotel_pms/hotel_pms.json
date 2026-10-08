@@ -1,4 +1,5 @@
 {
+ "doctype": "Workspace",
  "category": "Modules",
  "charts": [],
  "content": "[{\"id\":\"shortcut-section\",\"type\":\"shortcut\"},{\"id\":\"card-masters\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\"}},{\"id\":\"card-operations\",\"type\":\"card\",\"data\":{\"card_name\":\"Operations\"}}]",
