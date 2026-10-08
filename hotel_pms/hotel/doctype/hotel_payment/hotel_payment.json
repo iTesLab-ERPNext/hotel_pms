@@ -1,0 +1,136 @@
+{
+ "actions": [],
+ "autoname": "PAY-.####",
+ "creation": "2026-10-08 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": ["customer", "reservation", "stay", "folio", "payment_date", "payment_type", "payment_method", "amount", "reference", "notes", "is_test_data"],
+ "fields": [
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "options": "Hotel Customer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "reservation",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Reservation",
+   "options": "Hotel Reservation"
+  },
+  {
+   "fieldname": "stay",
+   "fieldtype": "Link",
+   "label": "Stay",
+   "options": "Hotel Stay"
+  },
+  {
+   "fieldname": "folio",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Folio",
+   "options": "Hotel Folio"
+  },
+  {
+   "default": "Today",
+   "fieldname": "payment_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Payment Date"
+  },
+  {
+   "fieldname": "payment_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Payment Type",
+   "options": "Advance\nPartial\nFull"
+  },
+  {
+   "fieldname": "payment_method",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Payment Method",
+   "options": "Cash\nCard\nBank Transfer\nCheque\nOther"
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount",
+   "reqd": 1
+  },
+  {
+   "fieldname": "reference",
+   "fieldtype": "Data",
+   "label": "Reference"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text",
+   "label": "Notes"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_test_data",
+   "fieldtype": "Check",
+   "label": "Is Test Data"
+  }
+ ],
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-10-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel",
+ "name": "Hotel Payment",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "cancel": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Hotel Manager",
+   "share": 1,
+   "submit": 1,
+   "cancel": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Cashier",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

@@ -1,0 +1,187 @@
+{
+ "actions": [],
+ "autoname": "RES-.####",
+ "creation": "2026-10-08 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "customer", "booking_date", "arrival_date", "departure_date",
+  "number_of_nights", "number_of_days", "col_break1",
+  "number_of_families", "total_adults", "total_children", "total_infants", "total_guests",
+  "package", "status", "notes", "is_test_data",
+  "section_rooms", "rooms",
+  "section_families", "families"
+ ],
+ "fields": [
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "options": "Hotel Customer",
+   "reqd": 1
+  },
+  {
+   "default": "Today",
+   "fieldname": "booking_date",
+   "fieldtype": "Date",
+   "label": "Booking Date"
+  },
+  {
+   "fieldname": "arrival_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Arrival Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "departure_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Departure Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "number_of_nights",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Nights",
+   "read_only": 1
+  },
+  {
+   "fieldname": "number_of_days",
+   "fieldtype": "Int",
+   "label": "Days",
+   "read_only": 1
+  },
+  {
+   "fieldname": "col_break1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "number_of_families",
+   "fieldtype": "Int",
+   "label": "Number of Families",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_adults",
+   "fieldtype": "Int",
+   "label": "Total Adults",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_children",
+   "fieldtype": "Int",
+   "label": "Total Children",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_infants",
+   "fieldtype": "Int",
+   "label": "Total Infants",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_guests",
+   "fieldtype": "Int",
+   "label": "Total Guests",
+   "read_only": 1
+  },
+  {
+   "fieldname": "package",
+   "fieldtype": "Link",
+   "label": "Package",
+   "options": "Hotel Package"
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Draft\nConfirmed\nCancelled\nNo Show\nChecked In\nCompleted"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text",
+   "label": "Notes"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_test_data",
+   "fieldtype": "Check",
+   "label": "Is Test Data"
+  },
+  {
+   "fieldname": "section_rooms",
+   "fieldtype": "Section Break",
+   "label": "Rooms"
+  },
+  {
+   "fieldname": "rooms",
+   "fieldtype": "Table",
+   "label": "Rooms",
+   "options": "Hotel Reservation Room"
+  },
+  {
+   "fieldname": "section_families",
+   "fieldtype": "Section Break",
+   "label": "Families"
+  },
+  {
+   "fieldname": "families",
+   "fieldtype": "Table",
+   "label": "Families",
+   "options": "Hotel Reservation Family"
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel",
+ "name": "Hotel Reservation",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Hotel Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Front Desk",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

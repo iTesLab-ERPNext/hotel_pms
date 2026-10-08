@@ -1,115 +1,120 @@
-# Hotel PMS — Frappe v15
+# Hotel PMS — Frappe v15 App
 
-A complete Hotel Property Management System built for **Frappe Framework v15**.
-
-> Does **NOT** require ERPNext.
+A production-quality Hotel Property Management System built as a Frappe v15 application.
 
 ## Features
 
-- Hotel Reservations with double-booking prevention
-- Customer management with categories and family types
-- Room Types and Rooms with status tracking
-- Reservation Packages (Room Only, BB, HB, FB, Family Weekend, Adventure)
-- Check-in to Stay to Folio to Checkout workflow
-- Room Movement during active stays
-- Guest Folio with service charges
-- Payment management (Cash, Card, Bank Transfer, Cheque)
-- Housekeeping workflow (Dirty to Cleaning to Clean to Available)
-- Room Calendar / Availability API
-- Dashboard KPIs
-- Role-based permissions (Hotel Manager, Front Desk, Housekeeping Staff, Hotel Cashier)
-- Complete demo seed data
+- **18 DocTypes** covering rooms, reservations, guests, folios, payments, housekeeping, and more
+- **Dashboard** with live room status, today's arrivals/departures, financial summaries
+- **Room Planning Board** — visual Gantt-style calendar showing room occupancy
+- **Full API layer** — whitelisted server methods for check-in, check-out, room move, folio charges, payments
+- **6 Script Reports** — Occupancy, Reservations, Arrivals, Departures, Revenue, Payments
+- **Workspace** with quick-access shortcuts to all modules
+- **Seed data system** — 20 rooms, 15 customers, 10 reservations, active stays with folios and payments
+- **Test Data page** — UI to add/delete/reset test data with log output
+- **Automated test suite** — 12 tests covering all core operations
+
+---
 
 ## Installation
 
 ```bash
-# 1. Get app
-bench get-app https://github.com/your-org/hotel_pms
-
-# 2. Install on site
-bench --site your-site.localhost install-app hotel_pms
-
-# 3. Migrate
-bench --site your-site.localhost migrate
-
-# 4. Load demo data (optional)
-bench --site your-site.localhost execute hotel_pms.fixtures.seed_data.create_demo_data
+# From your bench directory
+bench get-app hotel_pms /path/to/hotel_pms
+bench --site yoursite install-app hotel_pms
 ```
+
+Or install from a local directory:
+
+```bash
+bench pip install -e /path/to/hotel_pms
+bench --site yoursite install-app hotel_pms
+```
+
+---
+
+## Quick Start
+
+1. Install the app (see above)
+2. Navigate to the **Hotel PMS** workspace
+3. Load test data via the **Test Data** page (or Dashboard → Test Data)
+4. Explore the **Dashboard** and **Room Planning** pages
+
+---
 
 ## DocTypes
 
 | DocType | Description |
 |---|---|
-| Hotel Customer | Guest profile |
-| Hotel Customer Category | Customer categories |
-| Hotel Family Type | Family type lookup |
-| Hotel Room Type | Room type definitions |
-| Hotel Room | Individual rooms |
-| Hotel Package | Reservation packages |
-| Hotel Package Item | Package service items |
-| Hotel Reservation | Main reservation |
-| Hotel Reservation Room | Rooms in reservation |
-| Hotel Reservation Guest | Guest families |
-| Hotel Stay | Active stay record |
-| Hotel Room Movement | Room change history |
-| Hotel Service | Available services |
-| Hotel Folio | Guest billing folio |
-| Hotel Folio Item | Folio charge lines |
-| Hotel Payment | Payments |
-| Hotel Housekeeping | Housekeeping tasks |
+| Hotel Customer Category | Categories: Individual, Family, Corporate, VIP, Agency, Group |
+| Hotel Family Type | Family types: Single, Couple, Family, Large Family, Group |
+| Hotel Room Type | Room types with capacities and base prices |
+| Hotel Customer | Guest profiles with categories, nationality, ID documents |
+| Hotel Room | Physical rooms with status and housekeeping tracking |
+| Hotel Reservation | Main reservation with rooms, families, packages |
+| Hotel Reservation Room | Child: rooms per reservation |
+| Hotel Reservation Family | Child: family groups per reservation |
+| Hotel Reservation Guest | Child: individual guest details |
+| Hotel Package | Packages combining services |
+| Hotel Package Item | Child: package service items |
+| Hotel Service | Individual services with rates |
+| Hotel Stay | Active/completed stays per room per reservation |
+| Hotel Room Movement | Room-to-room guest transfers |
+| Hotel Folio | Bill for a stay, with itemised charges |
+| Hotel Folio Item | Child: individual charge lines |
+| Hotel Payment | Payments (cash, card, bank transfer) linked to folios |
+| Hotel Housekeeping | Housekeeping status change log |
+
+---
+
+## API Methods
+
+All methods are `@frappe.whitelist()` and available at `hotel_pms.api.hotel_api.*`:
+
+| Method | Description |
+|---|---|
+| `get_dashboard_data()` | All stats for the dashboard |
+| `get_room_availability(arrival, departure, room_type?)` | Available rooms for date range |
+| `get_room_calendar(from_date, to_date, room?, room_type?)` | Calendar data |
+| `get_planning_board(from_date, days)` | Room planning board data |
+| `check_in(reservation)` | Creates stays, updates room status, creates folios |
+| `check_out(stay_name)` | Closes stay, sets room to Cleaning, closes folio |
+| `move_room(stay_name, new_room, reason?, new_rate?)` | Move guest to different room |
+| `add_folio_charge(folio, charge_type, description, qty, rate, ...)` | Add charge to folio |
+| `create_payment(customer, amount, method, ...)` | Record payment |
+| `get_folio_details(reservation?, stay?)` | Folio with items and payments |
+| `update_housekeeping_status(room, new_status, notes?)` | Update room HK status |
+
+---
+
+## Seed Data (bench command)
+
+```bash
+bench --site yoursite execute hotel_pms.setup.seed_demo_data.seed
+bench --site yoursite execute hotel_pms.setup.seed_demo_data.delete_test_data
+```
+
+---
+
+## Running Tests
+
+```bash
+bench run-tests --app hotel_pms --module hotel_pms.tests.test_hotel_pms
+```
+
+---
 
 ## Roles
 
-| Role | Permissions |
+| Role | Access |
 |---|---|
-| Hotel Manager | Full access |
-| Front Desk | Reservations, Check-in, Folio |
-| Housekeeping Staff | Rooms, Housekeeping |
-| Hotel Cashier | Folio, Payments |
+| Hotel Manager | Full access to all DocTypes |
+| Front Desk | Customers, Reservations, Rooms, Stays |
+| Cashier | Folios, Payments |
+| Housekeeping | Rooms, Housekeeping records |
 
-## Workflow
+---
 
-```
-Customer -> Reservation -> Confirm
-         -> Check-in -> Stay + Folio
-         -> Add Charges -> Payment
-         -> Checkout -> Housekeeping -> Room Available
-```
+## License
 
-## API
-
-```python
-# Check availability
-frappe.call('hotel_pms.api.availability.get_available_rooms',
-    args={arrival_date, departure_date, room_type})
-
-# Room calendar
-frappe.call('hotel_pms.api.availability.get_room_calendar',
-    args={from_date, to_date})
-
-# Check-in
-frappe.call('hotel_pms.api.checkin.checkin',
-    args={reservation})
-
-# Checkout
-frappe.call('hotel_pms.api.checkout.checkout',
-    args={stay})
-
-# Room movement
-frappe.call('hotel_pms.api.movement.move_room',
-    args={stay, new_room, reason, new_rate})
-
-# Add folio charge
-frappe.call('hotel_pms.api.folio.add_charge',
-    args={folio, service, quantity, rate})
-
-# Add payment
-frappe.call('hotel_pms.api.payment.add_payment',
-    args={folio, customer, amount, payment_method})
-```
-
-## Tests
-
-```bash
-bench run-tests --app hotel_pms
-```
+MIT

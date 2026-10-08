@@ -1,0 +1,14 @@
+{
+ "creation": "2026-10-08 00:00:00.000000",
+ "doctype": "Page",
+ "module": "Hotel",
+ "name": "room-planning",
+ "page_name": "room-planning",
+ "roles": [
+  {"role": "Hotel Manager"},
+  {"role": "Front Desk"},
+  {"role": "System Manager"}
+ ],
+ "standard": "Yes",
+ "title": "Room Planning"
+}

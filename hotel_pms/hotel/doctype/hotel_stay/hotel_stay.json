@@ -1,0 +1,111 @@
+{
+ "actions": [],
+ "autoname": "STAY-.####",
+ "creation": "2026-10-08 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": ["customer", "reservation", "room", "checkin_date", "expected_checkout", "actual_checkout", "status", "is_test_data"],
+ "fields": [
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "options": "Hotel Customer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "reservation",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Reservation",
+   "options": "Hotel Reservation"
+  },
+  {
+   "fieldname": "room",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Room",
+   "options": "Hotel Room",
+   "reqd": 1
+  },
+  {
+   "fieldname": "checkin_date",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Check-in Date"
+  },
+  {
+   "fieldname": "expected_checkout",
+   "fieldtype": "Date",
+   "label": "Expected Checkout"
+  },
+  {
+   "fieldname": "actual_checkout",
+   "fieldtype": "Datetime",
+   "label": "Actual Checkout"
+  },
+  {
+   "default": "Active",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Active\nTransferred\nChecked Out"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_test_data",
+   "fieldtype": "Check",
+   "label": "Is Test Data"
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel",
+ "name": "Hotel Stay",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Hotel Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Front Desk",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

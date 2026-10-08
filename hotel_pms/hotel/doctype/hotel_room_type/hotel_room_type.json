@@ -1,0 +1,102 @@
+{
+ "actions": [],
+ "creation": "2026-10-08 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": ["room_type", "code", "capacity_adults", "capacity_children", "maximum_occupancy", "base_price", "description", "active", "is_test_data"],
+ "fields": [
+  {
+   "fieldname": "room_type",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Room Type",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "code",
+   "fieldtype": "Data",
+   "label": "Code"
+  },
+  {
+   "fieldname": "capacity_adults",
+   "fieldtype": "Int",
+   "label": "Capacity Adults"
+  },
+  {
+   "fieldname": "capacity_children",
+   "fieldtype": "Int",
+   "label": "Capacity Children"
+  },
+  {
+   "fieldname": "maximum_occupancy",
+   "fieldtype": "Int",
+   "label": "Maximum Occupancy"
+  },
+  {
+   "fieldname": "base_price",
+   "fieldtype": "Currency",
+   "label": "Base Price"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "default": "1",
+   "fieldname": "active",
+   "fieldtype": "Check",
+   "label": "Active"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_test_data",
+   "fieldtype": "Check",
+   "label": "Is Test Data"
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel",
+ "name": "Hotel Room Type",
+ "naming_rule": "By fieldname",
+ "autoname": "field:room_type",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Hotel Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "role": "Front Desk"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

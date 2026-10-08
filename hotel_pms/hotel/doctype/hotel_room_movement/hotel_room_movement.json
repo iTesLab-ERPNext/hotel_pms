@@ -1,0 +1,120 @@
+{
+ "actions": [],
+ "autoname": "MOV-.####",
+ "creation": "2026-10-08 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": ["stay", "reservation", "customer", "old_room", "new_room", "movement_date", "reason", "old_rate", "new_rate", "notes", "is_test_data"],
+ "fields": [
+  {
+   "fieldname": "stay",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Stay",
+   "options": "Hotel Stay",
+   "reqd": 1
+  },
+  {
+   "fieldname": "reservation",
+   "fieldtype": "Link",
+   "label": "Reservation",
+   "options": "Hotel Reservation"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "options": "Hotel Customer"
+  },
+  {
+   "fieldname": "old_room",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Old Room",
+   "options": "Hotel Room"
+  },
+  {
+   "fieldname": "new_room",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "New Room",
+   "options": "Hotel Room"
+  },
+  {
+   "fieldname": "movement_date",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Movement Date"
+  },
+  {
+   "fieldname": "reason",
+   "fieldtype": "Data",
+   "label": "Reason"
+  },
+  {
+   "fieldname": "old_rate",
+   "fieldtype": "Currency",
+   "label": "Old Rate"
+  },
+  {
+   "fieldname": "new_rate",
+   "fieldtype": "Currency",
+   "label": "New Rate"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text",
+   "label": "Notes"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_test_data",
+   "fieldtype": "Check",
+   "label": "Is Test Data"
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel",
+ "name": "Hotel Room Movement",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Hotel Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "role": "Front Desk"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

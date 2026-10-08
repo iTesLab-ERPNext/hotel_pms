@@ -1,0 +1,130 @@
+{
+ "actions": [],
+ "autoname": "field:room_number",
+ "creation": "2026-10-08 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": ["room_number", "room_name", "room_type", "floor", "capacity", "status", "housekeeping_status", "description", "active", "is_test_data"],
+ "fields": [
+  {
+   "fieldname": "room_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Room Number",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "room_name",
+   "fieldtype": "Data",
+   "label": "Room Name"
+  },
+  {
+   "fieldname": "room_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Room Type",
+   "options": "Hotel Room Type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "floor",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Floor"
+  },
+  {
+   "fieldname": "capacity",
+   "fieldtype": "Int",
+   "label": "Capacity"
+  },
+  {
+   "default": "Available",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Available\nReserved\nOccupied\nCleaning\nMaintenance\nBlocked\nOut of Service"
+  },
+  {
+   "default": "Clean",
+   "fieldname": "housekeeping_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Housekeeping Status",
+   "options": "Clean\nDirty\nCleaning\nInspected\nMaintenance"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "default": "1",
+   "fieldname": "active",
+   "fieldtype": "Check",
+   "label": "Active"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_test_data",
+   "fieldtype": "Check",
+   "label": "Is Test Data"
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel",
+ "name": "Hotel Room",
+ "naming_rule": "By fieldname",
+ "title_field": "room_name",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Hotel Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Front Desk",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "read": 1,
+   "write": 1,
+   "role": "Housekeeping"
+  }
+ ],
+ "sort_field": "room_number",
+ "sort_order": "ASC",
+ "states": [],
+ "track_changes": 1
+}

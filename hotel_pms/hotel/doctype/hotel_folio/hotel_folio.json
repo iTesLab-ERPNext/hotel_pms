@@ -1,0 +1,126 @@
+{
+ "actions": [],
+ "autoname": "FOLIO-.####",
+ "creation": "2026-10-08 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": ["customer", "reservation", "stay", "total_charges", "total_payments", "balance", "status", "is_test_data", "section_items", "items"],
+ "fields": [
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Customer",
+   "options": "Hotel Customer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "reservation",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Reservation",
+   "options": "Hotel Reservation"
+  },
+  {
+   "fieldname": "stay",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Stay",
+   "options": "Hotel Stay"
+  },
+  {
+   "fieldname": "total_charges",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Total Charges",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_payments",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Total Payments",
+   "read_only": 1
+  },
+  {
+   "fieldname": "balance",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Balance",
+   "read_only": 1
+  },
+  {
+   "default": "Open",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Open\nPartially Paid\nPaid\nClosed"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_test_data",
+   "fieldtype": "Check",
+   "label": "Is Test Data"
+  },
+  {
+   "fieldname": "section_items",
+   "fieldtype": "Section Break",
+   "label": "Charges"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Charges",
+   "options": "Hotel Folio Item"
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel",
+ "name": "Hotel Folio",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Hotel Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Cashier",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

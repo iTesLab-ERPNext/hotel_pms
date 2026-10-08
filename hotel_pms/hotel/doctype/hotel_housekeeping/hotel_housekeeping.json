@@ -1,0 +1,105 @@
+{
+ "actions": [],
+ "autoname": "HK-.####",
+ "creation": "2026-10-08 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": ["room", "date", "previous_status", "new_status", "assigned_to", "notes", "is_test_data"],
+ "fields": [
+  {
+   "fieldname": "room",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Room",
+   "options": "Hotel Room",
+   "reqd": 1
+  },
+  {
+   "default": "Today",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date"
+  },
+  {
+   "fieldname": "previous_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Previous Status",
+   "options": "\nClean\nDirty\nCleaning\nInspected\nMaintenance"
+  },
+  {
+   "fieldname": "new_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "New Status",
+   "options": "Clean\nDirty\nCleaning\nInspected\nMaintenance",
+   "reqd": 1
+  },
+  {
+   "fieldname": "assigned_to",
+   "fieldtype": "Data",
+   "label": "Assigned To"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text",
+   "label": "Notes"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_test_data",
+   "fieldtype": "Check",
+   "label": "Is Test Data"
+  }
+ ],
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-10-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel",
+ "name": "Hotel Housekeeping",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "cancel": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Hotel Manager",
+   "share": 1,
+   "submit": 1,
+   "cancel": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "read": 1,
+   "write": 1,
+   "submit": 1,
+   "role": "Housekeeping"
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

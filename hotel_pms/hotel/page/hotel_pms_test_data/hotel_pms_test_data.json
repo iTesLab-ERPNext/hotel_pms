@@ -1,0 +1,13 @@
+{
+ "creation": "2026-10-08 00:00:00.000000",
+ "doctype": "Page",
+ "module": "Hotel",
+ "name": "hotel-pms-test-data",
+ "page_name": "hotel-pms-test-data",
+ "roles": [
+  {"role": "Hotel Manager"},
+  {"role": "System Manager"}
+ ],
+ "standard": "Yes",
+ "title": "Hotel PMS Test Data"
+}
