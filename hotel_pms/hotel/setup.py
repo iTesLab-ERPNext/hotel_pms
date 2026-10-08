@@ -126,9 +126,14 @@ def before_uninstall() -> None:
         if frappe.db.exists("Hotel Service", name):
             frappe.delete_doc("Hotel Service", name, ignore_permissions=True)
 
+    # Roles are shared system records linked to DocType permissions;
+    # Frappe blocks deletion while those links exist. Disable instead.
     for role in ROLES:
         if frappe.db.exists("Role", role):
-            frappe.delete_doc("Role", role, ignore_permissions=True)
+            try:
+                frappe.db.set_value("Role", role, "disabled", 1)
+            except Exception:
+                pass
 
     frappe.db.commit()
 
