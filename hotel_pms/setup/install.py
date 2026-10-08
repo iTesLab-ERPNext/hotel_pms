@@ -72,9 +72,12 @@ def _sync_workspace():
         if not doc.title:
             doc.title = "Hotel PMS"
         doc.flags.ignore_permissions = True
-        doc.flags.ignore_version = True
+        doc.flags.ignore_version    = True
+        doc.flags.ignore_links      = True   # skip link validation for Pages/Reports not yet synced
         doc.save()
         print("  Updated workspace: Hotel PMS")
     else:
-        frappe.get_doc(ws_data).insert(ignore_permissions=True)
+        doc = frappe.get_doc(ws_data)
+        doc.flags.ignore_links = True
+        doc.insert(ignore_permissions=True)
         print("  Created workspace: Hotel PMS")
