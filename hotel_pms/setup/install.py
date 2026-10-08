@@ -16,6 +16,7 @@ def after_migrate():
     """Runs after every 'bench migrate'.
     All DocType tables exist by this point, so it's safe to insert records.
     """
+    ensure_module_def()
     create_default_categories()
     sync_workspace()
     frappe.db.commit()
@@ -27,6 +28,23 @@ def create_roles():
         if not frappe.db.exists("Role", role):
             frappe.get_doc({"doctype": "Role", "role_name": role}).insert(ignore_permissions=True)
             print(f"  Created role: {role}")
+
+
+def ensure_module_def():
+    """Guarantee the 'Hotel' Module Def exists before inserting any Hotel DocType records.
+
+    bench migrate normally creates Module Def entries from modules.txt, but on sites
+    that already have other apps (e.g. ERPNext) the sync can happen after after_migrate
+    fires, causing 'Module Hotel not found'. Creating it here is idempotent and safe.
+    """
+    if not frappe.db.exists("Module Def", "Hotel"):
+        frappe.get_doc({
+            "doctype": "Module Def",
+            "module_name": "Hotel",
+            "app_name": "hotel_pms",
+        }).insert(ignore_permissions=True)
+        frappe.db.commit()
+        print("  Created Module Def: Hotel")
 
 
 def create_default_categories():
