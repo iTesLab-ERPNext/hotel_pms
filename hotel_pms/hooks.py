@@ -7,12 +7,12 @@ app_license = "MIT"
 app_version = "1.0.0"
 
 # Includes in <head>
-# NOTE: hotel_pms.js is loaded per-page via frappe.require() — not globally,
-# so that a missing build never crashes the Frappe sidebar.
+# hotel_pms.js is loaded per-page via frappe.require() — NOT globally,
+# so a missing build never crashes the Frappe sidebar.
 app_include_css = []
 app_include_js = []
 
-# Fixtures — exported/imported via bench export-fixtures / import-fixtures
+# Fixtures — synced via: bench --site <site> migrate
 fixtures = [
     {
         "doctype": "Role",
@@ -30,6 +30,3 @@ doc_events = {
         "on_submit": "hotel_pms.hotel_pms.doctype.hotel_stay.hotel_stay.on_submit"
     }
 }
-
-# Run after app install
-after_install = "hotel_pms.setup.after_install"
