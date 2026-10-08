@@ -1,0 +1,28 @@
+{
+  "name": "Hotel Folio",
+  "module": "Hotel PMS",
+  "doctype": "DocType",
+  "autoname": "format:FOLIO-{YYYY}-{#####}",
+  "title_field": "guest_name",
+  "fields": [
+    {"fieldname": "stay", "fieldtype": "Link", "options": "Hotel Stay", "label": "Stay", "reqd": 1, "in_list_view": 1},
+    {"fieldname": "guest_name", "fieldtype": "Data", "label": "Guest Name", "in_list_view": 1},
+    {"fieldname": "col_break_1", "fieldtype": "Column Break"},
+    {"fieldname": "room", "fieldtype": "Link", "options": "Hotel Room", "label": "Room", "in_list_view": 1},
+    {"fieldname": "status", "fieldtype": "Select", "options": "Open\nClosed", "label": "Status", "default": "Open", "in_list_view": 1},
+    {"fieldname": "section_dates", "fieldtype": "Section Break", "label": "Dates"},
+    {"fieldname": "opening_date", "fieldtype": "Date", "label": "Opening Date"},
+    {"fieldname": "closing_date", "fieldtype": "Date", "label": "Closing Date"},
+    {"fieldname": "section_charges", "fieldtype": "Section Break", "label": "Charges"},
+    {"fieldname": "items", "fieldtype": "Table", "options": "Hotel Folio Item", "label": "Charge Lines"},
+    {"fieldname": "section_totals", "fieldtype": "Section Break", "label": "Totals"},
+    {"fieldname": "total_charges", "fieldtype": "Currency", "label": "Total Charges", "read_only": 1},
+    {"fieldname": "total_payments", "fieldtype": "Currency", "label": "Total Payments", "read_only": 1}
+  ],
+  "permissions": [
+    {"role": "Hotel Administrator", "read": 1, "write": 1, "create": 1, "delete": 1},
+    {"role": "Hotel Manager", "read": 1, "write": 1},
+    {"role": "Front Desk", "read": 1, "write": 1},
+    {"role": "Cashier", "read": 1, "write": 1}
+  ]
+}

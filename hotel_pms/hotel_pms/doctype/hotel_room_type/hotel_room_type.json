@@ -1,0 +1,20 @@
+{
+  "name": "Hotel Room Type",
+  "module": "Hotel PMS",
+  "doctype": "DocType",
+  "autoname": "field:name",
+  "name_case": "UPPER CASE",
+  "fields": [
+    {"fieldname": "room_type_name", "fieldtype": "Data", "label": "Room Type Name", "reqd": 1, "in_list_view": 1},
+    {"fieldname": "base_rate", "fieldtype": "Currency", "label": "Base Rate / Night", "reqd": 1, "in_list_view": 1},
+    {"fieldname": "max_occupancy", "fieldtype": "Int", "label": "Max Occupancy", "default": "2"},
+    {"fieldname": "description", "fieldtype": "Small Text", "label": "Description"},
+    {"fieldname": "amenities", "fieldtype": "Small Text", "label": "Amenities"},
+    {"fieldname": "image", "fieldtype": "Attach Image", "label": "Image"}
+  ],
+  "permissions": [
+    {"role": "Hotel Administrator", "read": 1, "write": 1, "create": 1, "delete": 1},
+    {"role": "Hotel Manager", "read": 1, "write": 1, "create": 1},
+    {"role": "Front Desk", "read": 1}
+  ]
+}

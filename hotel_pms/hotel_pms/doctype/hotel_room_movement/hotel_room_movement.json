@@ -1,0 +1,17 @@
+{
+  "name": "Hotel Room Movement",
+  "module": "Hotel PMS",
+  "doctype": "DocType",
+  "autoname": "format:RMV-{YYYY}-{#####}",
+  "fields": [
+    {"fieldname": "stay", "fieldtype": "Link", "options": "Hotel Stay", "label": "Stay", "reqd": 1},
+    {"fieldname": "from_room", "fieldtype": "Link", "options": "Hotel Room", "label": "From Room"},
+    {"fieldname": "to_room", "fieldtype": "Link", "options": "Hotel Room", "label": "To Room", "reqd": 1},
+    {"fieldname": "movement_date", "fieldtype": "Date", "label": "Date"},
+    {"fieldname": "reason", "fieldtype": "Small Text", "label": "Reason"}
+  ],
+  "permissions": [
+    {"role": "Hotel Administrator", "read": 1, "write": 1, "create": 1},
+    {"role": "Front Desk", "read": 1, "write": 1, "create": 1}
+  ]
+}

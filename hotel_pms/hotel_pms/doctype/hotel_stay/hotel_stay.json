@@ -1,0 +1,27 @@
+{
+  "name": "Hotel Stay",
+  "module": "Hotel PMS",
+  "doctype": "DocType",
+  "autoname": "format:STAY-{YYYY}-{#####}",
+  "title_field": "guest_name",
+  "fields": [
+    {"fieldname": "reservation", "fieldtype": "Link", "options": "Hotel Reservation", "label": "Reservation", "in_list_view": 1},
+    {"fieldname": "guest_name", "fieldtype": "Data", "label": "Guest Name", "reqd": 1, "in_list_view": 1},
+    {"fieldname": "col_break_1", "fieldtype": "Column Break"},
+    {"fieldname": "room", "fieldtype": "Link", "options": "Hotel Room", "label": "Room", "reqd": 1, "in_list_view": 1},
+    {"fieldname": "status", "fieldtype": "Select", "options": "Checked In\nChecked Out\nDid Not Arrive", "label": "Status", "default": "Checked In", "in_list_view": 1},
+    {"fieldname": "section_dates", "fieldtype": "Section Break", "label": "Dates"},
+    {"fieldname": "checkin_date", "fieldtype": "Date", "label": "Check-in Date", "reqd": 1},
+    {"fieldname": "expected_checkout", "fieldtype": "Date", "label": "Expected Checkout"},
+    {"fieldname": "actual_checkout", "fieldtype": "Date", "label": "Actual Checkout"},
+    {"fieldname": "col_break_2", "fieldtype": "Column Break"},
+    {"fieldname": "rate_per_night", "fieldtype": "Currency", "label": "Rate / Night"},
+    {"fieldname": "notes", "fieldtype": "Small Text", "label": "Notes"}
+  ],
+  "permissions": [
+    {"role": "Hotel Administrator", "read": 1, "write": 1, "create": 1, "delete": 1},
+    {"role": "Hotel Manager", "read": 1, "write": 1},
+    {"role": "Front Desk", "read": 1, "write": 1},
+    {"role": "Cashier", "read": 1}
+  ]
+}

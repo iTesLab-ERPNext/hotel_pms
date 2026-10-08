@@ -1,0 +1,21 @@
+{
+  "name": "Hotel Room",
+  "module": "Hotel PMS",
+  "doctype": "DocType",
+  "autoname": "field:room_number",
+  "fields": [
+    {"fieldname": "room_number", "fieldtype": "Data", "label": "Room Number", "reqd": 1, "in_list_view": 1},
+    {"fieldname": "room_type", "fieldtype": "Link", "options": "Hotel Room Type", "label": "Room Type", "reqd": 1, "in_list_view": 1},
+    {"fieldname": "floor", "fieldtype": "Data", "label": "Floor", "in_list_view": 1},
+    {"fieldname": "rate", "fieldtype": "Currency", "label": "Rate / Night", "in_list_view": 1},
+    {"fieldname": "status", "fieldtype": "Select", "options": "Available\nOccupied\nDirty\nMaintenance\nOut of Order", "label": "Status", "default": "Available", "in_list_view": 1},
+    {"fieldname": "is_active", "fieldtype": "Check", "label": "Is Active", "default": "1"},
+    {"fieldname": "notes", "fieldtype": "Small Text", "label": "Notes"}
+  ],
+  "permissions": [
+    {"role": "Hotel Administrator", "read": 1, "write": 1, "create": 1, "delete": 1},
+    {"role": "Hotel Manager", "read": 1, "write": 1},
+    {"role": "Front Desk", "read": 1, "write": 1},
+    {"role": "Housekeeping", "read": 1, "write": 1}
+  ]
+}

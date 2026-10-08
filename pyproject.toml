@@ -1,5 +1,9 @@
 [project]
 name = "hotel_pms"
 version = "1.0.0"
-description = "Hotel PMS for ERPNext"
+description = "Hotel Property Management System for ERPNext"
 requires-python = ">=3.10"
+
+[build-system]
+requires = ["setuptools>=45", "setuptools-scm"]
+build-backend = "setuptools.backends.legacy:build"

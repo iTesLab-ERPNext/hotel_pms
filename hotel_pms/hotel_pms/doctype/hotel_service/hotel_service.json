@@ -1,0 +1,17 @@
+{
+  "name": "Hotel Service",
+  "module": "Hotel PMS",
+  "doctype": "DocType",
+  "autoname": "field:name",
+  "fields": [
+    {"fieldname": "service_name", "fieldtype": "Data", "label": "Service Name", "reqd": 1, "in_list_view": 1},
+    {"fieldname": "charge_type", "fieldtype": "Select", "options": "Room Charge\nF&B\nLaundry\nTransport\nSpa\nParking\nRecreation\nMiscellaneous", "label": "Charge Type", "reqd": 1, "in_list_view": 1},
+    {"fieldname": "rate", "fieldtype": "Currency", "label": "Rate", "in_list_view": 1},
+    {"fieldname": "is_active", "fieldtype": "Check", "label": "Is Active", "default": "1"}
+  ],
+  "permissions": [
+    {"role": "Hotel Administrator", "read": 1, "write": 1, "create": 1, "delete": 1},
+    {"role": "Hotel Manager", "read": 1, "write": 1},
+    {"role": "Front Desk", "read": 1}
+  ]
+}

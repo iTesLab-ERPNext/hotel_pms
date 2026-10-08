@@ -1,0 +1,10 @@
+{
+  "name": "seed_demo_data",
+  "page_name": "seed_demo_data",
+  "title": "Seed Demo Data",
+  "module": "Hotel PMS",
+  "roles": [
+    {"role": "Administrator"},
+    {"role": "Hotel Administrator"}
+  ]
+}

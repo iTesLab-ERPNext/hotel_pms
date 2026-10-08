@@ -1,0 +1,35 @@
+{
+  "name": "Hotel Reservation",
+  "module": "Hotel PMS",
+  "doctype": "DocType",
+  "autoname": "format:RES-{YYYY}-{#####}",
+  "title_field": "guest_name",
+  "fields": [
+    {"fieldname": "guest_name", "fieldtype": "Data", "label": "Guest Name", "reqd": 1, "in_list_view": 1},
+    {"fieldname": "customer", "fieldtype": "Link", "options": "Customer", "label": "Customer"},
+    {"fieldname": "col_break_1", "fieldtype": "Column Break"},
+    {"fieldname": "status", "fieldtype": "Select", "options": "Pending\nConfirmed\nTentative\nChecked In\nChecked Out\nCancelled\nNo Show", "label": "Status", "default": "Pending", "in_list_view": 1},
+    {"fieldname": "booking_source", "fieldtype": "Link", "options": "Hotel Booking Source", "label": "Booking Source"},
+    {"fieldname": "section_dates", "fieldtype": "Section Break", "label": "Dates"},
+    {"fieldname": "arrival_date", "fieldtype": "Date", "label": "Arrival Date", "reqd": 1, "in_list_view": 1},
+    {"fieldname": "departure_date", "fieldtype": "Date", "label": "Departure Date", "reqd": 1, "in_list_view": 1},
+    {"fieldname": "number_of_nights", "fieldtype": "Int", "label": "Nights", "read_only": 1},
+    {"fieldname": "col_break_2", "fieldtype": "Column Break"},
+    {"fieldname": "number_of_guests", "fieldtype": "Int", "label": "Guests", "default": "1"},
+    {"fieldname": "room_type", "fieldtype": "Link", "options": "Hotel Room Type", "label": "Preferred Room Type"},
+    {"fieldname": "section_rooms", "fieldtype": "Section Break", "label": "Rooms"},
+    {"fieldname": "rooms", "fieldtype": "Table", "options": "Hotel Reservation Room", "label": "Rooms"},
+    {"fieldname": "section_packages", "fieldtype": "Section Break", "label": "Packages & Services"},
+    {"fieldname": "packages", "fieldtype": "Table", "options": "Hotel Reservation Package", "label": "Packages"},
+    {"fieldname": "section_family", "fieldtype": "Section Break", "label": "Family Members"},
+    {"fieldname": "family_members", "fieldtype": "Table", "options": "Hotel Reservation Family", "label": "Family Members"},
+    {"fieldname": "section_notes", "fieldtype": "Section Break", "label": "Notes"},
+    {"fieldname": "special_requests", "fieldtype": "Small Text", "label": "Special Requests"},
+    {"fieldname": "cancellation_reason", "fieldtype": "Small Text", "label": "Cancellation Reason"}
+  ],
+  "permissions": [
+    {"role": "Hotel Administrator", "read": 1, "write": 1, "create": 1, "delete": 1, "submit": 1, "cancel": 1},
+    {"role": "Hotel Manager", "read": 1, "write": 1, "create": 1, "submit": 1, "cancel": 1},
+    {"role": "Front Desk", "read": 1, "write": 1, "create": 1}
+  ]
+}
