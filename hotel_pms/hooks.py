@@ -7,8 +7,10 @@ app_license = "MIT"
 app_version = "1.0.0"
 
 # Includes in <head>
+# NOTE: hotel_pms.js is loaded per-page via frappe.require() — not globally,
+# so that a missing build never crashes the Frappe sidebar.
 app_include_css = []
-app_include_js = ["/assets/hotel_pms/js/hotel_pms.js"]
+app_include_js = []
 
 # Fixtures — exported/imported via bench export-fixtures / import-fixtures
 fixtures = [
