@@ -52,6 +52,16 @@ def get_dashboard_data():
         WHERE status != 'Closed' AND balance > 0
     """)[0][0] or 0
 
+    open_folios = frappe.db.count(
+        "Hotel Folio", {"status": ["in", ["Open", "Partially Paid"]]})
+
+    month_start = frappe.utils.get_first_day(today)
+    month_payments = frappe.db.sql("""
+        SELECT COALESCE(SUM(amount), 0)
+        FROM `tabHotel Payment`
+        WHERE payment_date >= %s AND payment_date <= %s AND docstatus != 2
+    """, (month_start, today))[0][0] or 0
+
     return {
         "rooms": room_stats,
         "today": {
@@ -64,6 +74,8 @@ def get_dashboard_data():
         "financial": {
             "today_payments": float(today_payments),
             "outstanding_balances": float(outstanding),
+            "open_folios": open_folios,
+            "month_payments": float(month_payments),
         },
     }
 

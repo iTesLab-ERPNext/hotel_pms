@@ -1,7 +1,7 @@
 {
  "category": "Modules",
  "charts": [],
- "content": "[]",
+ "content": "[{\"type\": \"header\", \"data\": {\"text\": \"Dashboards\", \"level\": 4, \"col\": 12}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Dashboard\", \"col\": 3}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Room Board\", \"col\": 3}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Room Planning\", \"col\": 3}}, {\"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"type\": \"header\", \"data\": {\"text\": \"Operations\", \"level\": 4, \"col\": 12}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Active Stays\", \"col\": 3}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Available Rooms\", \"col\": 3}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Reservations\", \"col\": 3}}, {\"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Folios\", \"col\": 3}}]",
  "creation": "2026-10-08 00:00:00.000000",
  "doctype": "Workspace",
  "hide_custom": 0,
@@ -9,282 +9,111 @@
  "label": "Hotel PMS",
  "links": [
   {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Dashboard",
-   "link_count": 0,
-   "link_to": "hotel-pms-dashboard",
-   "link_type": "Page",
-   "onboard": 1,
-   "type": "Link"
+   "label": "Masters",
+   "type": "Card Break",
+   "icon": null,
+   "hidden": null
   },
   {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Room Planning",
-   "link_count": 0,
-   "link_to": "room-planning",
-   "link_type": "Page",
-   "onboard": 1,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Front Desk",
-   "type": "Card Break"
-  },
-  {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Reservations",
-   "link_count": 0,
-   "link_to": "Hotel Reservation",
+   "label": "Hotel Room Type",
+   "type": "Link",
    "link_type": "DocType",
-   "onboard": 1,
-   "type": "Link"
-  },
-  {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Customers",
-   "link_count": 0,
-   "link_to": "Hotel Customer",
-   "link_type": "DocType",
-   "onboard": 1,
-   "type": "Link"
-  },
-  {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Active Stays",
-   "link_count": 0,
-   "link_to": "Hotel Stay",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Room Movements",
-   "link_count": 0,
-   "link_to": "Hotel Room Movement",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Rooms",
-   "type": "Card Break"
-  },
-  {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Hotel Rooms",
-   "link_count": 0,
-   "link_to": "Hotel Room",
-   "link_type": "DocType",
-   "onboard": 1,
-   "type": "Link"
-  },
-  {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Room Types",
-   "link_count": 0,
    "link_to": "Hotel Room Type",
+   "onboard": 1
+  },
+  {
+   "label": "Hotel Room",
+   "type": "Link",
    "link_type": "DocType",
-   "onboard": 1,
-   "type": "Link"
+   "link_to": "Hotel Room",
+   "onboard": 1
   },
   {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Housekeeping",
-   "link_count": 0,
-   "link_to": "Hotel Housekeeping",
+   "label": "Hotel Customer",
+   "type": "Link",
    "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
+   "link_to": "Hotel Customer",
+   "onboard": 1
   },
   {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Financial",
-   "type": "Card Break"
-  },
-  {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Folios",
-   "link_count": 0,
-   "link_to": "Hotel Folio",
+   "label": "Hotel Service",
+   "type": "Link",
    "link_type": "DocType",
-   "onboard": 1,
-   "type": "Link"
+   "link_to": "Hotel Service"
   },
   {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Payments",
-   "link_count": 0,
-   "link_to": "Hotel Payment",
+   "label": "Operations",
+   "type": "Card Break",
+   "icon": null,
+   "hidden": null
+  },
+  {
+   "label": "Hotel Reservation",
+   "type": "Link",
    "link_type": "DocType",
-   "onboard": 1,
-   "type": "Link"
+   "link_to": "Hotel Reservation",
+   "onboard": 1
   },
   {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Services & Packages",
-   "type": "Card Break"
-  },
-  {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Services",
-   "link_count": 0,
-   "link_to": "Hotel Service",
+   "label": "Hotel Stay",
+   "type": "Link",
    "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
+   "link_to": "Hotel Stay"
   },
   {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Packages",
-   "link_count": 0,
-   "link_to": "Hotel Package",
+   "label": "Hotel Folio",
+   "type": "Link",
    "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
+   "link_to": "Hotel Folio"
   },
   {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Setup",
-   "type": "Card Break"
-  },
-  {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Customer Categories",
-   "link_count": 0,
-   "link_to": "Hotel Customer Category",
+   "label": "Hotel Payment",
+   "type": "Link",
    "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
+   "link_to": "Hotel Payment"
   },
   {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Family Types",
-   "link_count": 0,
-   "link_to": "Hotel Family Type",
+   "label": "Hotel Housekeeping",
+   "type": "Link",
    "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
+   "link_to": "Hotel Housekeeping"
   },
   {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Test Data",
-   "link_count": 0,
-   "link_to": "hotel-pms-test-data",
-   "link_type": "Page",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
    "label": "Reports",
-   "type": "Card Break"
+   "type": "Card Break",
+   "icon": null,
+   "hidden": null
   },
   {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Occupancy Report",
-   "link_count": 0,
-   "link_to": "Occupancy Report",
+   "label": "Daily Room Occupancy",
+   "type": "Link",
    "link_type": "Report",
-   "onboard": 1,
-   "type": "Link"
+   "link_to": "Daily Room Occupancy",
+   "onboard": 1
   },
   {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Reservations Report",
-   "link_count": 0,
-   "link_to": "Reservations Report",
+   "label": "Arrivals and Departures",
+   "type": "Link",
    "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
+   "link_to": "Arrivals and Departures"
   },
   {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Arrivals Report",
-   "link_count": 0,
-   "link_to": "Arrivals Report",
+   "label": "In-House Guest Folio Summary",
+   "type": "Link",
    "link_type": "Report",
-   "onboard": 1,
-   "type": "Link"
+   "link_to": "In-House Guest Folio Summary"
   },
   {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Departures Report",
-   "link_count": 0,
-   "link_to": "Departures Report",
+   "label": "Housekeeping Status Board",
+   "type": "Link",
    "link_type": "Report",
-   "onboard": 1,
-   "type": "Link"
+   "link_to": "Housekeeping Status Board"
   },
   {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Revenue Report",
-   "link_count": 0,
-   "link_to": "Revenue Report",
+   "label": "Revenue by Charge Type",
+   "type": "Link",
    "link_type": "Report",
-   "onboard": 1,
-   "type": "Link"
-  },
-  {
-   "dependencies": "",
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Payments Report",
-   "link_count": 0,
-   "link_to": "Payments Report",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
+   "link_to": "Revenue by Charge Type"
   }
  ],
  "modified": "2026-10-08 00:00:00.000000",
@@ -314,11 +143,33 @@
  "shortcuts": [
   {
    "color": "Blue",
+   "label": "Dashboard",
+   "link_to": "hotel-pms-dashboard",
+   "type": "Page",
+   "icon": "dashboard"
+  },
+  {
+   "color": "Green",
+   "label": "Room Board",
+   "link_to": "room-board",
+   "type": "Page",
+   "icon": "table"
+  },
+  {
+   "color": "Purple",
+   "label": "Room Planning",
+   "link_to": "room-planning",
+   "type": "Page",
+   "icon": "calendar"
+  },
+  {
+   "color": "Blue",
    "format": "{} Active",
    "label": "Active Stays",
    "link_to": "Hotel Stay",
    "stats_filter": "{\"status\": \"Active\"}",
-   "type": "DocType"
+   "type": "DocType",
+   "icon": "bed"
   },
   {
    "color": "Green",
@@ -326,19 +177,33 @@
    "label": "Available Rooms",
    "link_to": "Hotel Room",
    "stats_filter": "{\"status\": \"Available\"}",
-   "type": "DocType"
+   "type": "DocType",
+   "icon": "home"
   },
   {
    "color": "Orange",
-   "label": "New Reservation",
+   "format": "{} Confirmed",
+   "label": "Reservations",
    "link_to": "Hotel Reservation",
-   "type": "DocType"
+   "stats_filter": "{\"status\": \"Confirmed\"}",
+   "type": "DocType",
+   "icon": "calendar"
   },
   {
-   "color": "Blue",
-   "label": "Dashboard",
-   "link_to": "hotel-pms-dashboard",
-   "type": "Page"
+   "color": "Red",
+   "format": "{} Open",
+   "label": "Folios",
+   "link_to": "Hotel Folio",
+   "stats_filter": "{\"status\": [\"in\", [\"Open\", \"Partially Paid\"]]}",
+   "type": "DocType",
+   "icon": "file"
+  },
+  {
+   "color": "Yellow",
+   "label": "Housekeeping",
+   "link_to": "Hotel Housekeeping",
+   "type": "DocType",
+   "icon": "tools"
   }
  ],
  "title": "Hotel PMS"

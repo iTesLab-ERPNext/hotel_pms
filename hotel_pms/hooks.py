@@ -17,6 +17,17 @@ add_to_apps_screen = [
     }
 ]
 
+# ── Navbar shortcut (top bar) ───────────────────────────────────────────────────
+# Adds a "Hotel" link in the Frappe navbar pointing straight to the dashboard.
+standard_navbar_items = [
+    {
+        "item_label":  "Hotel Dashboard",
+        "item_type":   "Route",
+        "route":       "/hotel-pms-dashboard",
+        "is_standard": 1,
+    }
+]
+
 # ── Fixtures — exported/imported by bench export-fixtures / import-fixtures ────
 fixtures = [
     {"dt": "Role",       "filters": [["name", "in", ["Hotel Manager", "Front Desk", "Housekeeping", "Cashier"]]]},
