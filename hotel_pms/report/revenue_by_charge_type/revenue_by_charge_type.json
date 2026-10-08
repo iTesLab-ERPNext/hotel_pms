@@ -1,0 +1,16 @@
+{
+ "add_total_row": 1,
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "Report",
+ "is_standard": "Yes",
+ "module": "Hotel PMS",
+ "name": "Revenue by Charge Type",
+ "ref_doctype": "Hotel Folio Item",
+ "report_name": "Revenue by Charge Type",
+ "report_type": "Script Report",
+ "roles": [
+  {"role": "Hotel Administrator"},
+  {"role": "Hotel Manager"},
+  {"role": "Accountant"}
+ ]
+}

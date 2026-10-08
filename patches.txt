@@ -1,0 +1,2 @@
+hotel_pms.patches.v1_0.create_default_booking_sources
+hotel_pms.patches.v1_0.set_room_initial_status

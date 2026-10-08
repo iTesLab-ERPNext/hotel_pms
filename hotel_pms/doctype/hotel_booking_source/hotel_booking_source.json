@@ -1,0 +1,18 @@
+{
+ "autoname": "field:source_name",
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {"fieldname": "source_name","fieldtype": "Data","label": "Source Name","reqd": 1,"unique": 1,"in_list_view": 1},
+  {"fieldname": "active",     "fieldtype": "Check","label": "Active","default": "1"}
+ ],
+ "module": "Hotel PMS",
+ "name": "Hotel Booking Source",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {"role": "Hotel Administrator","read":1,"write":1,"create":1,"delete":1},
+  {"role": "Front Desk","read":1}
+ ]
+}

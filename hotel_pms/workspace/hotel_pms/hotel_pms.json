@@ -1,0 +1,198 @@
+{
+ "category": "Modules",
+ "charts": [],
+ "content": "[{\"type\":\"onboarding\"},{\"type\":\"spacer\"},{\"type\":\"card\",\"data\":{\"card_name\":\"Front Desk\"}},{\"type\":\"card\",\"data\":{\"card_name\":\"Housekeeping\"}},{\"type\":\"card\",\"data\":{\"card_name\":\"Configuration\"}},{\"type\":\"card\",\"data\":{\"card_name\":\"Reports\"}}]",
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "Workspace",
+ "hide_custom": 0,
+ "is_hidden": 0,
+ "label": "Hotel PMS",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Front Desk",
+   "link_count": 0,
+   "onboard": 1,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "label": "Room Board",
+   "link_type": "Page",
+   "onboard": 1,
+   "page_or_report_name": "room-board",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "label": "Hotel Reservation",
+   "link_type": "DocType",
+   "onboard": 1,
+   "page_or_report_name": "Hotel Reservation",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "label": "Hotel Stay",
+   "link_type": "DocType",
+   "onboard": 1,
+   "page_or_report_name": "Hotel Stay",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "label": "Hotel Folio",
+   "link_type": "DocType",
+   "onboard": 0,
+   "page_or_report_name": "Hotel Folio",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "label": "Hotel Payment Allocation",
+   "link_type": "DocType",
+   "onboard": 0,
+   "page_or_report_name": "Hotel Payment Allocation",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Housekeeping",
+   "link_count": 0,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "label": "Hotel Housekeeping",
+   "link_type": "DocType",
+   "onboard": 0,
+   "page_or_report_name": "Hotel Housekeeping",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "label": "Hotel Room",
+   "link_type": "DocType",
+   "onboard": 0,
+   "page_or_report_name": "Hotel Room",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Configuration",
+   "link_count": 0,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "label": "Hotel Room Type",
+   "link_type": "DocType",
+   "onboard": 0,
+   "page_or_report_name": "Hotel Room Type",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "label": "Hotel Rate Plan",
+   "link_type": "DocType",
+   "onboard": 0,
+   "page_or_report_name": "Hotel Rate Plan",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "label": "Hotel Season",
+   "link_type": "DocType",
+   "onboard": 0,
+   "page_or_report_name": "Hotel Season",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "label": "Hotel Service",
+   "link_type": "DocType",
+   "onboard": 0,
+   "page_or_report_name": "Hotel Service",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "label": "Hotel Booking Source",
+   "link_type": "DocType",
+   "onboard": 0,
+   "page_or_report_name": "Hotel Booking Source",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "label": "Hotel Customer Category",
+   "link_type": "DocType",
+   "onboard": 0,
+   "page_or_report_name": "Hotel Customer Category",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "label": "Seed Demo Data",
+   "link_type": "Page",
+   "onboard": 0,
+   "page_or_report_name": "seed-demo-data",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Reports",
+   "link_count": 0,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Room Occupancy Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "page_or_report_name": "Room Occupancy Report",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Arrival Departure Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "page_or_report_name": "Arrival Departure Report",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Revenue by Charge Type",
+   "link_type": "Report",
+   "onboard": 0,
+   "page_or_report_name": "Revenue by Charge Type",
+   "type": "Link"
+  }
+ ],
+ "module": "Hotel PMS",
+ "name": "Hotel PMS",
+ "owner": "Administrator",
+ "public": 1,
+ "restrict_to_domain": "",
+ "roles": [],
+ "sequence_id": 999,
+ "shortcuts": [
+  {"label": "Room Board",        "link_to": "room-board",         "type": "Page"},
+  {"label": "Reservation",       "link_to": "Hotel Reservation",  "type": "DocType"},
+  {"label": "Hotel Stay",        "link_to": "Hotel Stay",         "type": "DocType"},
+  {"label": "Hotel Folio",       "link_to": "Hotel Folio",        "type": "DocType"},
+  {"label": "Occupancy Report",  "link_to": "Room Occupancy Report","type": "Report"}
+ ],
+ "title": "Hotel PMS"
+}

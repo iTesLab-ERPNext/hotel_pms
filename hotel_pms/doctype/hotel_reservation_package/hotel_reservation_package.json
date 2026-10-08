@@ -1,0 +1,26 @@
+{
+ "autoname": "field:package_name",
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {"fieldname": "package_name",    "fieldtype": "Data",      "label": "Package Name",   "reqd": 1, "unique": 1, "in_list_view": 1},
+  {"fieldname": "description",     "fieldtype": "Small Text","label": "Description"},
+  {"fieldname": "column_break_1",  "fieldtype": "Column Break"},
+  {"fieldname": "active",          "fieldtype": "Check",     "label": "Active",         "default": "1"},
+  {"fieldname": "package_price",   "fieldtype": "Currency",  "label": "Package Base Price (per person/night)", "read_only": 0},
+  {"fieldname": "section_items",   "fieldtype": "Section Break","label": "Package Items"},
+  {"fieldname": "items",           "fieldtype": "Table",     "label": "Items",          "options": "Hotel Package Item"}
+ ],
+ "module": "Hotel PMS",
+ "name": "Hotel Reservation Package",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {"role": "Hotel Administrator","read":1,"write":1,"create":1,"delete":1},
+  {"role": "Hotel Manager",      "read":1,"write":1},
+  {"role": "Front Desk",         "read":1},
+  {"role": "Reservation Manager","read":1,"write":1}
+ ],
+ "track_changes": 1
+}

@@ -1,0 +1,25 @@
+{
+ "autoname": "field:category_name",
+ "creation": "2026-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "fields": [
+  {"fieldname": "category_name", "fieldtype": "Data",      "label": "Category Name", "reqd": 1, "unique": 1, "in_list_view": 1},
+  {"fieldname": "description",   "fieldtype": "Small Text","label": "Description"},
+  {"fieldname": "column_break_1","fieldtype": "Column Break"},
+  {"fieldname": "default_discount_percent","fieldtype": "Percent","label": "Default Discount %"},
+  {"fieldname": "priority_service","fieldtype": "Check","label": "Priority Service", "default": "0"},
+  {"fieldname": "active",        "fieldtype": "Check",      "label": "Active",        "default": "1"}
+ ],
+ "module": "Hotel PMS",
+ "name": "Hotel Customer Category",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {"role": "Hotel Administrator", "read": 1, "write": 1, "create": 1, "delete": 1},
+  {"role": "Hotel Manager",       "read": 1, "write": 1},
+  {"role": "Front Desk",          "read": 1},
+  {"role": "Reservation Manager", "read": 1}
+ ],
+ "track_changes": 1
+}
