@@ -10,7 +10,7 @@ app_version = "1.0.0"
 app_include_css = []
 app_include_js = ["/assets/hotel_pms/js/hotel_pms.js"]
 
-# Fixtures
+# Fixtures — exported/imported via bench export-fixtures / import-fixtures
 fixtures = [
     {
         "doctype": "Role",
@@ -28,3 +28,6 @@ doc_events = {
         "on_submit": "hotel_pms.hotel_pms.doctype.hotel_stay.hotel_stay.on_submit"
     }
 }
+
+# Run after app install
+after_install = "hotel_pms.setup.after_install"
