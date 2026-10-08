@@ -7,7 +7,6 @@ app_license = "MIT"
 app_version = "1.0.0"
 
 # Includes in <head>
-# ------------------
 app_include_css = []
 app_include_js = ["/assets/hotel_pms/js/hotel_pms.js"]
 
@@ -16,6 +15,10 @@ fixtures = [
     {
         "doctype": "Role",
         "filters": [["name", "in", ["Hotel Manager", "Front Desk", "Housekeeping Staff", "Hotel Cashier"]]]
+    },
+    {
+        "doctype": "Workspace",
+        "filters": [["name", "in", ["Hotel PMS"]]]
     }
 ]
 
