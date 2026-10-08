@@ -57,6 +57,10 @@ def _sync_workspace():
         ws_data = json.load(f)
 
     ws_data["doctype"] = "Workspace"
+    # Ensure title is never None — Frappe's workspace.validate() calls
+    # strip_html(self.title) which crashes on NoneType.
+    if not ws_data.get("title"):
+        ws_data["title"] = ws_data.get("name", "Hotel PMS")
     # Strip timestamp/owner fields so optimistic locking never rejects the save
     # when the DB record is newer than the static JSON file.
     for field in ("modified", "modified_by", "creation", "owner"):
@@ -65,6 +69,8 @@ def _sync_workspace():
     if frappe.db.exists("Workspace", "Hotel PMS"):
         doc = frappe.get_doc("Workspace", "Hotel PMS")
         doc.update(ws_data)
+        if not doc.title:
+            doc.title = "Hotel PMS"
         doc.flags.ignore_permissions = True
         doc.flags.ignore_version = True
         doc.save()

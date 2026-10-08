@@ -294,11 +294,21 @@
  "owner": "Administrator",
  "public": 1,
  "roles": [
-  {"role": "Hotel Manager"},
-  {"role": "Front Desk"},
-  {"role": "Cashier"},
-  {"role": "Housekeeping"},
-  {"role": "System Manager"}
+  {
+   "role": "Hotel Manager"
+  },
+  {
+   "role": "Front Desk"
+  },
+  {
+   "role": "Cashier"
+  },
+  {
+   "role": "Housekeeping"
+  },
+  {
+   "role": "System Manager"
+  }
  ],
  "sequence_id": 1,
  "shortcuts": [
@@ -330,5 +340,6 @@
    "link_to": "hotel-pms-dashboard",
    "type": "Page"
   }
- ]
+ ],
+ "title": "Hotel PMS"
 }
