@@ -1,7 +1,3 @@
 {
-  "name": "hotel_pms",
-  "version": "0.0.1",
-  "description": "Hotel Property Management System for Frappe v15",
-  "scripts": {},
-  "devDependencies": {}
+  "private": true
 }
