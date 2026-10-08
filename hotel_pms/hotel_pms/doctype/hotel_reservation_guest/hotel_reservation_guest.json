@@ -1,0 +1,26 @@
+{
+  "actions": [],
+  "creation": "2026-01-01 00:00:00.000000",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": ["family_type","adults","children","infants","total_guests"],
+  "fields": [
+    {"fieldname":"family_type","fieldtype":"Link","label":"Family Type","options":"Hotel Family Type","in_list_view":1},
+    {"fieldname":"adults","fieldtype":"Int","label":"Adults","default":"1","in_list_view":1},
+    {"fieldname":"children","fieldtype":"Int","label":"Children","default":"0","in_list_view":1},
+    {"fieldname":"infants","fieldtype":"Int","label":"Infants","default":"0","in_list_view":1},
+    {"fieldname":"total_guests","fieldtype":"Int","label":"Total Guests","read_only":1,"in_list_view":1}
+  ],
+  "istable": 1,
+  "links": [],
+  "modified": "2026-01-01 00:00:00.000000",
+  "modified_by": "Administrator",
+  "module": "Hotel PMS",
+  "name": "Hotel Reservation Guest",
+  "owner": "Administrator",
+  "permissions": [],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "track_changes": 0
+}

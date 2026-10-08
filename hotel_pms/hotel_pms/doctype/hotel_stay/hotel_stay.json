@@ -1,27 +1,40 @@
 {
-  "name": "Hotel Stay",
-  "module": "Hotel PMS",
+  "actions": [],
+  "autoname": "naming_series:",
+  "creation": "2026-01-01 00:00:00.000000",
   "doctype": "DocType",
-  "autoname": "format:STAY-{YYYY}-{#####}",
-  "title_field": "guest_name",
-  "fields": [
-    {"fieldname": "reservation", "fieldtype": "Link", "options": "Hotel Reservation", "label": "Reservation", "in_list_view": 1},
-    {"fieldname": "guest_name", "fieldtype": "Data", "label": "Guest Name", "reqd": 1, "in_list_view": 1},
-    {"fieldname": "col_break_1", "fieldtype": "Column Break"},
-    {"fieldname": "room", "fieldtype": "Link", "options": "Hotel Room", "label": "Room", "reqd": 1, "in_list_view": 1},
-    {"fieldname": "status", "fieldtype": "Select", "options": "Checked In\nChecked Out\nDid Not Arrive", "label": "Status", "default": "Checked In", "in_list_view": 1},
-    {"fieldname": "section_dates", "fieldtype": "Section Break", "label": "Dates"},
-    {"fieldname": "checkin_date", "fieldtype": "Date", "label": "Check-in Date", "reqd": 1},
-    {"fieldname": "expected_checkout", "fieldtype": "Date", "label": "Expected Checkout"},
-    {"fieldname": "actual_checkout", "fieldtype": "Date", "label": "Actual Checkout"},
-    {"fieldname": "col_break_2", "fieldtype": "Column Break"},
-    {"fieldname": "rate_per_night", "fieldtype": "Currency", "label": "Rate / Night"},
-    {"fieldname": "notes", "fieldtype": "Small Text", "label": "Notes"}
+  "engine": "InnoDB",
+  "field_order": [
+    "naming_series","reservation","customer","col_break_1",
+    "room","checkin_date","expected_checkout","actual_checkout",
+    "status","notes"
   ],
+  "fields": [
+    {"fieldname":"naming_series","fieldtype":"Series","label":"Series","options":"STY-.YYYY.-"},
+    {"fieldname":"reservation","fieldtype":"Link","label":"Reservation","options":"Hotel Reservation","in_list_view":1},
+    {"fieldname":"customer","fieldtype":"Link","label":"Customer","options":"Hotel Customer","reqd":1,"in_list_view":1},
+    {"fieldname":"col_break_1","fieldtype":"Column Break"},
+    {"fieldname":"room","fieldtype":"Link","label":"Room","options":"Hotel Room","reqd":1,"in_list_view":1},
+    {"fieldname":"checkin_date","fieldtype":"Datetime","label":"Check-in Date","reqd":1,"in_list_view":1},
+    {"fieldname":"expected_checkout","fieldtype":"Date","label":"Expected Check-out"},
+    {"fieldname":"actual_checkout","fieldtype":"Datetime","label":"Actual Check-out"},
+    {"fieldname":"status","fieldtype":"Select","label":"Status","options":"Active\nTransferred\nChecked Out","default":"Active","in_list_view":1},
+    {"fieldname":"notes","fieldtype":"Small Text","label":"Notes"}
+  ],
+  "links": [],
+  "modified": "2026-01-01 00:00:00.000000",
+  "modified_by": "Administrator",
+  "module": "Hotel PMS",
+  "name": "Hotel Stay",
+  "owner": "Administrator",
   "permissions": [
-    {"role": "Hotel Administrator", "read": 1, "write": 1, "create": 1, "delete": 1},
-    {"role": "Hotel Manager", "read": 1, "write": 1},
-    {"role": "Front Desk", "read": 1, "write": 1},
-    {"role": "Cashier", "read": 1}
-  ]
+    {"permlevel":0,"role":"Hotel Manager","read":1,"write":1,"create":1,"delete":1},
+    {"permlevel":0,"role":"Front Desk","read":1,"write":1,"create":1},
+    {"permlevel":0,"role":"System Manager","read":1,"write":1,"create":1,"delete":1}
+  ],
+  "search_fields": "customer,room,status",
+  "sort_field": "checkin_date",
+  "sort_order": "DESC",
+  "title_field": "name",
+  "track_changes": 1
 }

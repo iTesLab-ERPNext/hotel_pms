@@ -1,0 +1,47 @@
+{
+  "actions": [],
+  "autoname": "naming_series:",
+  "creation": "2026-01-01 00:00:00.000000",
+  "doctype": "DocType",
+  "engine": "InnoDB",
+  "field_order": [
+    "naming_series","first_name","last_name","full_name",
+    "col_break_1","phone","email",
+    "section_identity","nationality","id_number",
+    "section_category","customer_category","family_type",
+    "section_notes","notes"
+  ],
+  "fields": [
+    {"fieldname":"naming_series","fieldtype":"Series","label":"Series","options":"HC-.YYYY.-"},
+    {"fieldname":"first_name","fieldtype":"Data","label":"First Name","reqd":1,"in_list_view":1},
+    {"fieldname":"last_name","fieldtype":"Data","label":"Last Name","reqd":1,"in_list_view":1},
+    {"fieldname":"full_name","fieldtype":"Data","label":"Full Name","read_only":1,"in_list_view":1},
+    {"fieldname":"col_break_1","fieldtype":"Column Break"},
+    {"fieldname":"phone","fieldtype":"Phone","label":"Phone","in_list_view":1},
+    {"fieldname":"email","fieldtype":"Data","label":"Email","options":"Email"},
+    {"fieldname":"section_identity","fieldtype":"Section Break","label":"Identity"},
+    {"fieldname":"nationality","fieldtype":"Data","label":"Nationality"},
+    {"fieldname":"id_number","fieldtype":"Data","label":"ID Number"},
+    {"fieldname":"section_category","fieldtype":"Section Break","label":"Category"},
+    {"fieldname":"customer_category","fieldtype":"Link","label":"Customer Category","options":"Hotel Customer Category"},
+    {"fieldname":"family_type","fieldtype":"Link","label":"Family Type","options":"Hotel Family Type"},
+    {"fieldname":"section_notes","fieldtype":"Section Break","label":"Notes"},
+    {"fieldname":"notes","fieldtype":"Text Editor","label":"Notes"}
+  ],
+  "links": [],
+  "modified": "2026-01-01 00:00:00.000000",
+  "modified_by": "Administrator",
+  "module": "Hotel PMS",
+  "name": "Hotel Customer",
+  "owner": "Administrator",
+  "permissions": [
+    {"permlevel":0,"role":"Hotel Manager","read":1,"write":1,"create":1,"delete":1},
+    {"permlevel":0,"role":"Front Desk","read":1,"write":1,"create":1},
+    {"permlevel":0,"role":"System Manager","read":1,"write":1,"create":1,"delete":1}
+  ],
+  "search_fields": "first_name,last_name,phone,email",
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "title_field": "full_name",
+  "track_changes": 1
+}

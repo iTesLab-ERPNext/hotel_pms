@@ -2,6 +2,12 @@ import frappe
 from frappe.model.document import Document
 
 class HotelRoom(Document):
-    def before_save(self):
-        if not self.rate and self.room_type:
-            self.rate = frappe.get_value("Hotel Room Type", self.room_type, "base_rate") or 0
+    def validate(self):
+        if self.room_type:
+            rt = frappe.get_doc("Hotel Room Type", self.room_type)
+            if not self.capacity:
+                self.capacity = rt.capacity_adults
+
+    def set_status(self, status):
+        self.status = status
+        self.save(ignore_permissions=True)

@@ -1,201 +1,115 @@
-# Hotel PMS
+# Hotel PMS — Frappe v15
 
-![Frappe](https://img.shields.io/badge/Frappe-v15-blue) ![ERPNext](https://img.shields.io/badge/ERPNext-v15-green) ![License](https://img.shields.io/badge/license-MIT-yellow)
+A complete Hotel Property Management System built for **Frappe Framework v15**.
 
-A full-featured **Hotel Property Management System** built as a custom Frappe/ERPNext app. Covers reservations, check-in/out, folio billing, housekeeping, and reporting.
-
----
+> Does **NOT** require ERPNext.
 
 ## Features
 
-- **Reservations** — Multi-room bookings, tentative/confirmed/cancelled states, booking source tracking, family member records, special requests
-- **Check-In / Check-Out** — Walk-in and reservation-based check-in, automated folio creation, force-checkout with balance override
-- **Folio & Billing** — Per-stay folios, charge posting by type (Room, F&B, Laundry, Spa, …), void charges, payment allocation (Cash, Card, Transfer, …)
-- **Room Board** — Live colour-coded grid by floor, KPI header (occupancy %, arrivals, departures), auto-refreshes every 60 s
-- **Housekeeping** — Task management (Daily Cleaning, Deep Clean, Turndown, Inspection), assignment to staff, status tracking
-- **Rate Plans & Seasons** — Seasonal rate multipliers, meal-plan variants (BB, HB, FB, AI)
-- **Reports** — Room Occupancy (ADR, RevPAR), Arrival/Departure, Revenue by Charge Type
-- **Scheduler** — Auto no-show, nightly room-charge posting, hourly room status sync
-- **Seed Demo Data** — One-click page that creates room types, rooms, services, booking sources and sample reservations
-
----
-
-## Prerequisites
-
-| Requirement | Version |
-|---|---|
-| Python | ≥ 3.10 |
-| Node.js | ≥ 18 |
-| Frappe Framework | v15 |
-| ERPNext | v15 |
-| MariaDB | ≥ 10.6 |
-
----
+- Hotel Reservations with double-booking prevention
+- Customer management with categories and family types
+- Room Types and Rooms with status tracking
+- Reservation Packages (Room Only, BB, HB, FB, Family Weekend, Adventure)
+- Check-in to Stay to Folio to Checkout workflow
+- Room Movement during active stays
+- Guest Folio with service charges
+- Payment management (Cash, Card, Bank Transfer, Cheque)
+- Housekeeping workflow (Dirty to Cleaning to Clean to Available)
+- Room Calendar / Availability API
+- Dashboard KPIs
+- Role-based permissions (Hotel Manager, Front Desk, Housekeeping Staff, Hotel Cashier)
+- Complete demo seed data
 
 ## Installation
 
-### 1. Get the app
-
 ```bash
-cd /path/to/frappe-bench
+# 1. Get app
 bench get-app https://github.com/your-org/hotel_pms
+
+# 2. Install on site
+bench --site your-site.localhost install-app hotel_pms
+
+# 3. Migrate
+bench --site your-site.localhost migrate
+
+# 4. Load demo data (optional)
+bench --site your-site.localhost execute hotel_pms.fixtures.seed_data.create_demo_data
 ```
 
-### 2. Install on a site
+## DocTypes
 
-```bash
-bench --site your.site.com install-app hotel_pms
-```
-
-### 3. Run migrations
-
-```bash
-bench --site your.site.com migrate
-```
-
-### 4. Restart bench
-
-```bash
-bench restart
-```
-
----
-
-## Post-Install: Seed Demo Data
-
-1. Open your site in the browser.
-2. Navigate to **Hotel PMS → Configuration → Seed Demo Data** (or go to `/app/seed_demo_data`).
-3. Click **Seed All Demo Data**.
-
-This creates:
-- 7 room types (Standard, Deluxe, Superior, Junior Suite, Suite, Family, Accessible)
-- 19 rooms across 5 floors
-- 10 services (Breakfast, Lunch, Dinner, Laundry, Spa, …)
-- 9 booking sources (Direct, Booking.com, Expedia, Airbnb, …)
-- 5 sample customers
-- 5 sample reservations (mix of Confirmed, Pending, Checked In)
-
-The operation is idempotent — existing records are skipped.
-
----
-
-## Module Overview
-
-| Module | Key DocTypes |
+| DocType | Description |
 |---|---|
-| Front Desk | Hotel Reservation, Hotel Stay, Hotel Folio, Hotel Payment Allocation |
-| Rooms | Hotel Room, Hotel Room Type, Hotel Room Movement |
-| Housekeeping | Hotel Housekeeping |
-| Configuration | Hotel Service, Hotel Season, Hotel Rate Plan, Hotel Booking Source |
-| Reports | Room Occupancy Report, Arrival Departure Report, Revenue by Charge Type |
-
----
-
-## DocType Reference
-
-| DocType | Type | Description |
-|---|---|---|
-| Hotel Room Type | Master | Room categories with base rate and max occupancy |
-| Hotel Room | Master | Individual rooms with floor, status, rate |
-| Hotel Booking Source | Master | OTA / direct channels with commission % |
-| Hotel Season | Master | Date ranges with rate multiplier |
-| Hotel Rate Plan | Master | Room-type + season + meal-plan pricing |
-| Hotel Service | Master | Billable services (F&B, Laundry, Spa, …) |
-| Hotel Customer Category | Master | Guest segments |
-| Hotel Family Type | Master | Family composition types |
-| Hotel Reservation | Transactional | Booking with rooms, packages, family members |
-| Hotel Reservation Room | Child | Rooms within a reservation |
-| Hotel Reservation Package | Child | Services included in a reservation |
-| Hotel Reservation Family | Child | Family members on a reservation |
-| Hotel Stay | Transactional | Active in-house guest stay |
-| Hotel Folio | Transactional | Guest bill (charges + payments) |
-| Hotel Folio Item | Child | Single charge line on a folio |
-| Hotel Payment Allocation | Submittable | Payment posted to a folio |
-| Hotel Housekeeping | Transactional | Room cleaning / inspection task |
-| Hotel Room Movement | Transactional | Room-change record |
-| Hotel Package Item | Child | Generic package line item |
-
----
-
-## API Reference
-
-All methods are whitelisted (callable via `frappe.call`).
-
-### Availability
-- `hotel_pms.hotel_pms.api.availability.get_available_rooms(arrival_date, departure_date, room_type=None)`
-- `hotel_pms.hotel_pms.api.availability.check_availability(arrival_date, departure_date, room_type=None)`
-
-### Check-In
-- `hotel_pms.hotel_pms.api.checkin.checkin_from_reservation(reservation_name, room=None)`
-- `hotel_pms.hotel_pms.api.checkin.walkin_checkin(guest_name, room, nights=1, rate_per_night=None)`
-
-### Check-Out
-- `hotel_pms.hotel_pms.api.checkout.checkout_stay(stay_name, force=False)`
-- `hotel_pms.hotel_pms.api.checkout.get_checkout_summary(stay_name)`
-
-### Folio
-- `hotel_pms.hotel_pms.api.folio.add_charge(folio_name, charge_type, description, amount, qty=1)`
-- `hotel_pms.hotel_pms.api.folio.void_charge(folio_name, row_name)`
-- `hotel_pms.hotel_pms.api.folio.get_folio_details(folio_name)`
-
-### Payment
-- `hotel_pms.hotel_pms.api.payment.post_payment(folio_name, payment_method, amount, reference=None)`
-- `hotel_pms.hotel_pms.api.payment.get_payment_methods()`
-
-### Reservation
-- `hotel_pms.hotel_pms.api.reservation.confirm_reservation(reservation_name)`
-- `hotel_pms.hotel_pms.api.reservation.cancel_reservation(reservation_name, reason=None)`
-- `hotel_pms.hotel_pms.api.reservation.mark_no_show(reservation_name)`
-- `hotel_pms.hotel_pms.api.reservation.get_arrivals(date=None)`
-- `hotel_pms.hotel_pms.api.reservation.get_departures(date=None)`
-- `hotel_pms.hotel_pms.api.reservation.get_in_house(date=None)`
-
-### Room Board
-- `hotel_pms.hotel_pms.api.room_board.get_room_board()`
-- `hotel_pms.hotel_pms.api.room_board.get_room_stats()`
-
----
-
-## Scheduler Events
-
-| Frequency | Task |
-|---|---|
-| Daily | `tasks.auto_no_show` — marks overdue Confirmed reservations as No Show |
-| Daily | `tasks.auto_post_room_charges` — posts room charge to all open folios |
-| Hourly | `tasks.update_room_statuses` — marks Occupied rooms Available when stay is checked out |
-
----
+| Hotel Customer | Guest profile |
+| Hotel Customer Category | Customer categories |
+| Hotel Family Type | Family type lookup |
+| Hotel Room Type | Room type definitions |
+| Hotel Room | Individual rooms |
+| Hotel Package | Reservation packages |
+| Hotel Package Item | Package service items |
+| Hotel Reservation | Main reservation |
+| Hotel Reservation Room | Rooms in reservation |
+| Hotel Reservation Guest | Guest families |
+| Hotel Stay | Active stay record |
+| Hotel Room Movement | Room change history |
+| Hotel Service | Available services |
+| Hotel Folio | Guest billing folio |
+| Hotel Folio Item | Folio charge lines |
+| Hotel Payment | Payments |
+| Hotel Housekeeping | Housekeeping tasks |
 
 ## Roles
 
-| Role | Description |
+| Role | Permissions |
 |---|---|
-| Hotel Administrator | Full access to all doctypes |
-| Hotel Manager | Read/write; cannot delete masters |
-| Front Desk | Reservations, stays, folios |
-| Housekeeping | Room status, housekeeping tasks |
-| Cashier | Folio charges and payments |
-| Night Audit | Audit access |
-| Revenue Manager | Rate plans, seasons, reports |
-| Food & Beverage | F&B services |
-| Concierge | Read-only guest info |
+| Hotel Manager | Full access |
+| Front Desk | Reservations, Check-in, Folio |
+| Housekeeping Staff | Rooms, Housekeeping |
+| Hotel Cashier | Folio, Payments |
 
----
+## Workflow
 
-## Development Notes
+```
+Customer -> Reservation -> Confirm
+         -> Check-in -> Stay + Folio
+         -> Add Charges -> Payment
+         -> Checkout -> Housekeeping -> Room Available
+```
 
-- App Python package: `hotel_pms/` (top level)
-- Frappe module: `hotel_pms/hotel_pms/` (matches `modules.txt` entry `Hotel PMS`)
-- Patches run automatically on `bench migrate`
-- Frontend pages use plain Frappe JS (no build step required)
-- `public/build.json` is intentionally empty (`{}`)
+## API
 
----
+```python
+# Check availability
+frappe.call('hotel_pms.api.availability.get_available_rooms',
+    args={arrival_date, departure_date, room_type})
 
-## License
+# Room calendar
+frappe.call('hotel_pms.api.availability.get_room_calendar',
+    args={from_date, to_date})
 
-MIT — see [LICENSE](LICENSE)
+# Check-in
+frappe.call('hotel_pms.api.checkin.checkin',
+    args={reservation})
 
----
+# Checkout
+frappe.call('hotel_pms.api.checkout.checkout',
+    args={stay})
 
-*Developed by [iTesLab](mailto:info@iteslab.com)*
+# Room movement
+frappe.call('hotel_pms.api.movement.move_room',
+    args={stay, new_room, reason, new_rate})
+
+# Add folio charge
+frappe.call('hotel_pms.api.folio.add_charge',
+    args={folio, service, quantity, rate})
+
+# Add payment
+frappe.call('hotel_pms.api.payment.add_payment',
+    args={folio, customer, amount, payment_method})
+```
+
+## Tests
+
+```bash
+bench run-tests --app hotel_pms
+```

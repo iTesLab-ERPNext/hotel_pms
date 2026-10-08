@@ -1,20 +1,38 @@
 {
-  "name": "Hotel Room Type",
-  "module": "Hotel PMS",
+  "actions": [],
+  "autoname": "field:room_type",
+  "creation": "2026-01-01 00:00:00.000000",
   "doctype": "DocType",
-  "autoname": "field:name",
-  "name_case": "UPPER CASE",
-  "fields": [
-    {"fieldname": "room_type_name", "fieldtype": "Data", "label": "Room Type Name", "reqd": 1, "in_list_view": 1},
-    {"fieldname": "base_rate", "fieldtype": "Currency", "label": "Base Rate / Night", "reqd": 1, "in_list_view": 1},
-    {"fieldname": "max_occupancy", "fieldtype": "Int", "label": "Max Occupancy", "default": "2"},
-    {"fieldname": "description", "fieldtype": "Small Text", "label": "Description"},
-    {"fieldname": "amenities", "fieldtype": "Small Text", "label": "Amenities"},
-    {"fieldname": "image", "fieldtype": "Attach Image", "label": "Image"}
+  "engine": "InnoDB",
+  "field_order": [
+    "room_type","code","col_break_1","capacity_adults","capacity_children",
+    "base_price","section_desc","description","active"
   ],
+  "fields": [
+    {"fieldname":"room_type","fieldtype":"Data","label":"Room Type","reqd":1,"in_list_view":1,"unique":1},
+    {"fieldname":"code","fieldtype":"Data","label":"Code","in_list_view":1},
+    {"fieldname":"col_break_1","fieldtype":"Column Break"},
+    {"fieldname":"capacity_adults","fieldtype":"Int","label":"Capacity Adults","default":"2"},
+    {"fieldname":"capacity_children","fieldtype":"Int","label":"Capacity Children","default":"0"},
+    {"fieldname":"base_price","fieldtype":"Currency","label":"Base Price","in_list_view":1},
+    {"fieldname":"section_desc","fieldtype":"Section Break","label":"Description"},
+    {"fieldname":"description","fieldtype":"Text Editor","label":"Description"},
+    {"fieldname":"active","fieldtype":"Check","label":"Active","default":"1","in_list_view":1}
+  ],
+  "links": [],
+  "modified": "2026-01-01 00:00:00.000000",
+  "modified_by": "Administrator",
+  "module": "Hotel PMS",
+  "name": "Hotel Room Type",
+  "naming_rule": "By fieldname",
+  "owner": "Administrator",
   "permissions": [
-    {"role": "Hotel Administrator", "read": 1, "write": 1, "create": 1, "delete": 1},
-    {"role": "Hotel Manager", "read": 1, "write": 1, "create": 1},
-    {"role": "Front Desk", "read": 1}
-  ]
+    {"permlevel":0,"role":"Hotel Manager","read":1,"write":1,"create":1,"delete":1},
+    {"permlevel":0,"role":"Front Desk","read":1},
+    {"permlevel":0,"role":"System Manager","read":1,"write":1,"create":1,"delete":1}
+  ],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "title_field": "room_type",
+  "track_changes": 1
 }

@@ -1,2 +1,5 @@
+import frappe
 from frappe.model.document import Document
-class HotelCustomerCategory(Document): pass
+
+class HotelCustomerCategory(Document):
+    pass

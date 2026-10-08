@@ -1,0 +1,2 @@
+include hotel_pms/templates/**/*
+include hotel_pms/public/**/*

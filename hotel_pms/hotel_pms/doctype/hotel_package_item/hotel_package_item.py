@@ -1,2 +1,5 @@
+import frappe
 from frappe.model.document import Document
-class HotelPackageItem(Document): pass
+
+class HotelPackageItem(Document):
+    pass

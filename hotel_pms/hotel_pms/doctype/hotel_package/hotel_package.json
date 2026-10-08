@@ -1,0 +1,32 @@
+{
+  "actions": [],
+  "autoname": "field:package_name",
+  "creation": "2026-01-01 00:00:00.000000",
+  "doctype": "DocType",
+  "engine": "InnoDB",
+  "field_order": ["package_name","package_code","total_price","active","description","items"],
+  "fields": [
+    {"fieldname":"package_name","fieldtype":"Data","label":"Package Name","reqd":1,"in_list_view":1,"unique":1},
+    {"fieldname":"package_code","fieldtype":"Data","label":"Package Code","in_list_view":1},
+    {"fieldname":"total_price","fieldtype":"Currency","label":"Total Price","read_only":1,"in_list_view":1},
+    {"fieldname":"active","fieldtype":"Check","label":"Active","default":"1"},
+    {"fieldname":"description","fieldtype":"Small Text","label":"Description"},
+    {"fieldname":"items","fieldtype":"Table","label":"Package Items","options":"Hotel Package Item"}
+  ],
+  "links": [],
+  "modified": "2026-01-01 00:00:00.000000",
+  "modified_by": "Administrator",
+  "module": "Hotel PMS",
+  "name": "Hotel Package",
+  "naming_rule": "By fieldname",
+  "owner": "Administrator",
+  "permissions": [
+    {"permlevel":0,"role":"Hotel Manager","read":1,"write":1,"create":1,"delete":1},
+    {"permlevel":0,"role":"Front Desk","read":1},
+    {"permlevel":0,"role":"System Manager","read":1,"write":1,"create":1,"delete":1}
+  ],
+  "sort_field": "package_name",
+  "sort_order": "ASC",
+  "title_field": "package_name",
+  "track_changes": 1
+}

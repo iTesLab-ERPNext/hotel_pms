@@ -1,17 +1,43 @@
 {
-  "name": "Hotel Room Movement",
-  "module": "Hotel PMS",
+  "actions": [],
+  "autoname": "naming_series:",
+  "creation": "2026-01-01 00:00:00.000000",
   "doctype": "DocType",
-  "autoname": "format:RMV-{YYYY}-{#####}",
-  "fields": [
-    {"fieldname": "stay", "fieldtype": "Link", "options": "Hotel Stay", "label": "Stay", "reqd": 1},
-    {"fieldname": "from_room", "fieldtype": "Link", "options": "Hotel Room", "label": "From Room"},
-    {"fieldname": "to_room", "fieldtype": "Link", "options": "Hotel Room", "label": "To Room", "reqd": 1},
-    {"fieldname": "movement_date", "fieldtype": "Date", "label": "Date"},
-    {"fieldname": "reason", "fieldtype": "Small Text", "label": "Reason"}
+  "engine": "InnoDB",
+  "field_order": [
+    "naming_series","stay","customer","date",
+    "col_break_1","old_room","new_room",
+    "section_rates","old_rate","new_rate",
+    "reason","notes"
   ],
+  "fields": [
+    {"fieldname":"naming_series","fieldtype":"Series","label":"Series","options":"MV-.YYYY.-"},
+    {"fieldname":"stay","fieldtype":"Link","label":"Stay","options":"Hotel Stay","reqd":1,"in_list_view":1},
+    {"fieldname":"customer","fieldtype":"Link","label":"Customer","options":"Hotel Customer","read_only":1,"in_list_view":1,"fetch_from":"stay.customer"},
+    {"fieldname":"date","fieldtype":"Datetime","label":"Date","reqd":1,"default":"Now"},
+    {"fieldname":"col_break_1","fieldtype":"Column Break"},
+    {"fieldname":"old_room","fieldtype":"Link","label":"Old Room","options":"Hotel Room","reqd":1,"in_list_view":1},
+    {"fieldname":"new_room","fieldtype":"Link","label":"New Room","options":"Hotel Room","reqd":1,"in_list_view":1},
+    {"fieldname":"section_rates","fieldtype":"Section Break","label":"Rates"},
+    {"fieldname":"old_rate","fieldtype":"Currency","label":"Old Rate"},
+    {"fieldname":"new_rate","fieldtype":"Currency","label":"New Rate"},
+    {"fieldname":"reason","fieldtype":"Select","label":"Reason","options":"Guest Request\nMaintenance\nUpgrade\nDowngrade\nOther"},
+    {"fieldname":"notes","fieldtype":"Small Text","label":"Notes"}
+  ],
+  "is_submittable": 1,
+  "links": [],
+  "modified": "2026-01-01 00:00:00.000000",
+  "modified_by": "Administrator",
+  "module": "Hotel PMS",
+  "name": "Hotel Room Movement",
+  "owner": "Administrator",
   "permissions": [
-    {"role": "Hotel Administrator", "read": 1, "write": 1, "create": 1},
-    {"role": "Front Desk", "read": 1, "write": 1, "create": 1}
-  ]
+    {"permlevel":0,"role":"Hotel Manager","read":1,"write":1,"create":1,"delete":1,"submit":1,"cancel":1},
+    {"permlevel":0,"role":"Front Desk","read":1,"write":1,"create":1,"submit":1},
+    {"permlevel":0,"role":"System Manager","read":1,"write":1,"create":1,"delete":1,"submit":1,"cancel":1}
+  ],
+  "sort_field": "date",
+  "sort_order": "DESC",
+  "title_field": "name",
+  "track_changes": 1
 }
