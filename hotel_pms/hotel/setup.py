@@ -62,14 +62,14 @@ DEMO_ROOMS = [
     ("401", "Presidential Villa",   "Villa",   4, 4,  8000, "Available"),
 ]
 
-# Demo customers: (full_name, email, phone, nationality, customer_category)
+# Demo customers: (first_name, last_name, email, phone, nationality, customer_category)
 DEMO_CUSTOMERS = [
-    ("Ahmed Ben Ali",       "ahmed.benali@email.com",   "+216 20 000 001", "Tunisian",  "Individual"),
-    ("Marie Dupont",        "marie.dupont@email.com",   "+33 6 00 00 00 01","French",   "Individual"),
-    ("John Smith",          "john.smith@email.com",     "+44 7700 000001",  "British",  "Individual"),
-    ("Fatima Al-Hassan",    "fatima.hassan@email.com",  "+966 50 000 0001", "Saudi",    "VIP"),
-    ("Carlos Rodriguez",    "carlos.rodriguez@corp.com","+34 600 000 001",  "Spanish",  "Corporate"),
-    ("Global Travel Agency","gta@globaltravel.com",     "+1 212 000 0001",  "American", "Agency"),
+    ("Ahmed",   "Ben Ali",    "ahmed.benali@email.com",    "+216 20 000 001",   "Tunisian", "Individual"),
+    ("Marie",   "Dupont",     "marie.dupont@email.com",    "+33 6 00 00 00 01", "French",   "Individual"),
+    ("John",    "Smith",      "john.smith@email.com",      "+44 7700 000001",   "British",  "Individual"),
+    ("Fatima",  "Al-Hassan",  "fatima.hassan@email.com",   "+966 50 000 0001",  "Saudi",    "VIP"),
+    ("Carlos",  "Rodriguez",  "carlos.rodriguez@corp.com", "+34 600 000 001",   "Spanish",  "Corporate"),
+    ("Global",  "Travel",     "gta@globaltravel.com",      "+1 212 000 0001",   "American", "Agency"),
 ]
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
@@ -174,11 +174,12 @@ def ensure_demo_customers() -> None:
     if frappe.db.count("Hotel Customer") > 0:
         return
 
-    for (name, email, phone, nationality, category) in DEMO_CUSTOMERS:
+    for (first, last, email, phone, nationality, category) in DEMO_CUSTOMERS:
         if not frappe.db.exists("Hotel Customer", {"email": email}):
             _insert({
                 "doctype": "Hotel Customer",
-                "full_name": name,
+                "first_name": first,
+                "last_name": last,
                 "email": email,
                 "mobile": phone,
                 "nationality": nationality,
