@@ -313,112 +313,373 @@ def _get_customer_by_email(email):
 
 
 def create_test_reservations(ok):
+    """
+    ~40 scenarios spread across 3 months:
+      - Past (-30 to -5 days)  : Completed stays with closed folios
+      - Current (-2 to +4 days): Checked-In stays with open/partial folios
+      - Near future (+1 to +20): Confirmed bookings
+      - Far future (+30 to +60): Confirmed bookings for month 2-3
+      - Special: No Show, Cancelled, Draft
+
+    Rooms are assigned so no two reservations overlap on the same room.
+    """
     today = nowdate()
-    # Scenario definitions
+    d = lambda n: add_days(today, n)   # shorthand
+
     scenarios = [
-        # A: Checked-in, 3 nights, standard room
+        # ── CURRENTLY ACTIVE (Checked In) ──────────────────────────────────
         {
-            "id": "A",
+            "id": "A1",
             "customer_email": "ahmed.benali@email.com",
-            "arrival": add_days(today, -1),
-            "departure": add_days(today, 2),
-            "status": "Checked In",
+            "arrival": d(-1), "departure": d(2), "status": "Checked In",
             "rooms": [{"room": "101", "adults": 2, "rate": 800}],
             "families": [{"family_type": "Couple", "adults": 2}],
         },
-        # B: Confirmed, arriving today
         {
-            "id": "B",
+            "id": "A2",
+            "customer_email": "m.saidi@corp.com",
+            "arrival": d(-2), "departure": d(3), "status": "Checked In",
+            "rooms": [{"room": "105", "adults": 1, "rate": 800}],
+            "families": [{"family_type": "Single", "adults": 1}],
+        },
+        {
+            "id": "A3",
+            "customer_email": "p.dupont@email.fr",
+            "arrival": d(-1), "departure": d(3), "status": "Checked In",
+            "rooms": [{"room": "201", "adults": 2, "rate": 1200}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+        },
+        {
+            "id": "A4",
+            "customer_email": "amina.b@email.com",
+            "arrival": d(-2), "departure": d(4), "status": "Checked In",
+            "rooms": [{"room": "205", "adults": 2, "rate": 1200}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+        },
+        {
+            "id": "A5",
             "customer_email": "sarah.j@email.com",
-            "arrival": today,
-            "departure": add_days(today, 5),
-            "status": "Confirmed",
+            "arrival": d(0), "departure": d(5), "status": "Checked In",
             "rooms": [{"room": "301", "adults": 2, "rate": 2000}],
             "families": [{"family_type": "Couple", "adults": 2}],
             "package": "Honeymoon Package",
         },
-        # C: Checked-in, family room
         {
-            "id": "C",
+            "id": "A6",
             "customer_email": "fatima.cherif@email.com",
-            "arrival": add_days(today, -2),
-            "departure": add_days(today, 3),
-            "status": "Checked In",
+            "arrival": d(-2), "departure": d(3), "status": "Checked In",
             "rooms": [{"room": "401", "adults": 2, "children": 2, "rate": 1600}],
             "families": [{"family_type": "Family", "adults": 2, "children": 2}],
             "package": "Family Fun Package",
         },
-        # D: Future confirmed
         {
-            "id": "D",
-            "customer_email": "p.dupont@email.fr",
-            "arrival": add_days(today, 3),
-            "departure": add_days(today, 7),
-            "status": "Confirmed",
-            "rooms": [{"room": "201", "adults": 2, "rate": 1200}],
-            "families": [{"family_type": "Couple", "adults": 2}],
-        },
-        # E: Draft
-        {
-            "id": "E",
-            "customer_email": "n.rahmani@email.com",
-            "arrival": add_days(today, 7),
-            "departure": add_days(today, 14),
-            "status": "Draft",
-            "rooms": [{"room": "302", "adults": 2, "rate": 2000}],
-            "families": [{"family_type": "Couple", "adults": 2}],
-        },
-        # F: Completed (past)
-        {
-            "id": "F",
-            "customer_email": "m.saidi@corp.com",
-            "arrival": add_days(today, -10),
-            "departure": add_days(today, -7),
-            "status": "Completed",
-            "rooms": [{"room": "202", "adults": 1, "rate": 1200}],
-            "families": [{"family_type": "Single", "adults": 1}],
-        },
-        # G: Cancelled
-        {
-            "id": "G",
-            "customer_email": "j.smith@email.co.uk",
-            "arrival": add_days(today, 2),
-            "departure": add_days(today, 5),
-            "status": "Cancelled",
-            "rooms": [{"room": "203", "adults": 2, "rate": 1200}],
-            "families": [{"family_type": "Couple", "adults": 2}],
-        },
-        # H: Checked-in, 2 rooms
-        {
-            "id": "H",
+            "id": "A7",
             "customer_email": "k.messaoud@email.com",
-            "arrival": add_days(today, -1),
-            "departure": add_days(today, 4),
-            "status": "Checked In",
+            "arrival": d(-1), "departure": d(4), "status": "Checked In",
             "rooms": [
                 {"room": "402", "adults": 2, "children": 3, "rate": 1600},
                 {"room": "403", "adults": 2, "children": 1, "rate": 1600},
             ],
             "families": [{"family_type": "Large Family", "adults": 4, "children": 4}],
         },
-        # I: Confirmed, arriving tomorrow
+
+        # ── PAST COMPLETED (arrivals -30 to -5) ────────────────────────────
         {
-            "id": "I",
-            "customer_email": "c.martinez@email.es",
-            "arrival": add_days(today, 1),
-            "departure": add_days(today, 4),
-            "status": "Confirmed",
+            "id": "P01",
+            "customer_email": "y.hamdi@email.tn",
+            "arrival": d(-30), "departure": d(-25), "status": "Completed",
+            "rooms": [{"room": "101", "adults": 2, "rate": 800}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+        },
+        {
+            "id": "P02",
+            "customer_email": "ahmed.benali@email.com",
+            "arrival": d(-28), "departure": d(-23), "status": "Completed",
             "rooms": [{"room": "102", "adults": 2, "rate": 800}],
             "families": [{"family_type": "Couple", "adults": 2}],
         },
-        # J: No show (past)
         {
-            "id": "J",
+            "id": "P03",
+            "customer_email": "c.martinez@email.es",
+            "arrival": d(-25), "departure": d(-20), "status": "Completed",
+            "rooms": [{"room": "103", "adults": 2, "rate": 800}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+        },
+        {
+            "id": "P04",
+            "customer_email": "liu.wei@email.cn",
+            "arrival": d(-22), "departure": d(-17), "status": "Completed",
+            "rooms": [{"room": "104", "adults": 2, "rate": 800}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+        },
+        {
+            "id": "P05",
             "customer_email": "h.otmani@email.ma",
-            "arrival": add_days(today, -3),
-            "departure": add_days(today, -1),
-            "status": "No Show",
+            "arrival": d(-18), "departure": d(-13), "status": "Completed",
+            "rooms": [{"room": "105", "adults": 2, "rate": 800}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+        },
+        {
+            "id": "P06",
+            "customer_email": "n.rahmani@email.com",
+            "arrival": d(-29), "departure": d(-23), "status": "Completed",
+            "rooms": [{"room": "201", "adults": 2, "rate": 1200}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+        },
+        {
+            "id": "P07",
+            "customer_email": "j.smith@email.co.uk",
+            "arrival": d(-26), "departure": d(-20), "status": "Completed",
+            "rooms": [{"room": "202", "adults": 1, "rate": 1200}],
+            "families": [{"family_type": "Single", "adults": 1}],
+        },
+        {
+            "id": "P08",
+            "customer_email": "fatima.cherif@email.com",
+            "arrival": d(-22), "departure": d(-17), "status": "Completed",
+            "rooms": [{"room": "203", "adults": 2, "children": 2, "rate": 1200}],
+            "families": [{"family_type": "Family", "adults": 2, "children": 2}],
+        },
+        {
+            "id": "P09",
+            "customer_email": "y.hamdi@email.tn",
+            "arrival": d(-20), "departure": d(-14), "status": "Completed",
             "rooms": [{"room": "204", "adults": 2, "rate": 1200}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+        },
+        {
+            "id": "P10",
+            "customer_email": "k.messaoud@email.com",
+            "arrival": d(-15), "departure": d(-10), "status": "Completed",
+            "rooms": [{"room": "205", "adults": 2, "rate": 1200}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+        },
+        {
+            "id": "P11",
+            "customer_email": "sarah.j@email.com",
+            "arrival": d(-28), "departure": d(-21), "status": "Completed",
+            "rooms": [{"room": "301", "adults": 2, "rate": 2000}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+            "package": "Honeymoon Package",
+        },
+        {
+            "id": "P12",
+            "customer_email": "p.dupont@email.fr",
+            "arrival": d(-24), "departure": d(-18), "status": "Completed",
+            "rooms": [{"room": "302", "adults": 2, "rate": 2000}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+        },
+        {
+            "id": "P13",
+            "customer_email": "m.saidi@corp.com",
+            "arrival": d(-20), "departure": d(-15), "status": "Completed",
+            "rooms": [{"room": "303", "adults": 1, "rate": 2000}],
+            "families": [{"family_type": "Single", "adults": 1}],
+        },
+        {
+            "id": "P14",
+            "customer_email": "o.belkacem@agency.dz",
+            "arrival": d(-26), "departure": d(-20), "status": "Completed",
+            "rooms": [{"room": "401", "adults": 2, "children": 3, "rate": 1600}],
+            "families": [{"family_type": "Family", "adults": 2, "children": 3}],
+        },
+        {
+            "id": "P15",
+            "customer_email": "c.martinez@email.es",
+            "arrival": d(-22), "departure": d(-16), "status": "Completed",
+            "rooms": [{"room": "402", "adults": 2, "children": 2, "rate": 1600}],
+            "families": [{"family_type": "Family", "adults": 2, "children": 2}],
+        },
+        {
+            "id": "P16",
+            "customer_email": "amina.b@email.com",
+            "arrival": d(-18), "departure": d(-12), "status": "Completed",
+            "rooms": [{"room": "403", "adults": 2, "children": 1, "rate": 1600}],
+            "families": [{"family_type": "Family", "adults": 2, "children": 1}],
+        },
+        {
+            "id": "P17",
+            "customer_email": "liu.wei@email.cn",
+            "arrival": d(-25), "departure": d(-19), "status": "Completed",
+            "rooms": [{"room": "404", "adults": 2, "children": 3, "rate": 1600}],
+            "families": [{"family_type": "Family", "adults": 2, "children": 3}],
+        },
+        {
+            "id": "P18",
+            "customer_email": "m.bernard@email.fr",
+            "arrival": d(-29), "departure": d(-23), "status": "Completed",
+            "rooms": [{"room": "405", "adults": 2, "rate": 1600}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+        },
+        {
+            "id": "P19",
+            "customer_email": "ahmed.benali@email.com",
+            "arrival": d(-14), "departure": d(-9), "status": "Completed",
+            "rooms": [{"room": "406", "adults": 2, "children": 1, "rate": 1600}],
+            "families": [{"family_type": "Family", "adults": 2, "children": 1}],
+        },
+
+        # ── NO SHOW / CANCELLED ─────────────────────────────────────────────
+        {
+            "id": "NS1",
+            "customer_email": "h.otmani@email.ma",
+            "arrival": d(-3), "departure": d(-1), "status": "No Show",
+            "rooms": [{"room": "204", "adults": 2, "rate": 1200}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+        },
+        {
+            "id": "CX1",
+            "customer_email": "m.bernard@email.fr",
+            "arrival": d(-12), "departure": d(-8), "status": "Cancelled",
+            "rooms": [{"room": "203", "adults": 2, "rate": 1200}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+        },
+
+        # ── NEAR FUTURE — CONFIRMED (+1 to +20) ────────────────────────────
+        {
+            "id": "F01",
+            "customer_email": "h.otmani@email.ma",
+            "arrival": d(5), "departure": d(10), "status": "Confirmed",
+            "rooms": [{"room": "101", "adults": 2, "rate": 800}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+        },
+        {
+            "id": "F02",
+            "customer_email": "m.bernard@email.fr",
+            "arrival": d(2), "departure": d(7), "status": "Confirmed",
+            "rooms": [{"room": "102", "adults": 2, "rate": 800}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+        },
+        {
+            "id": "F03",
+            "customer_email": "p.dupont@email.fr",
+            "arrival": d(5), "departure": d(10), "status": "Confirmed",
+            "rooms": [{"room": "103", "adults": 2, "rate": 800}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+        },
+        {
+            "id": "F04",
+            "customer_email": "j.smith@email.co.uk",
+            "arrival": d(5), "departure": d(11), "status": "Confirmed",
+            "rooms": [{"room": "201", "adults": 1, "rate": 1200}],
+            "families": [{"family_type": "Single", "adults": 1}],
+        },
+        {
+            "id": "F05",
+            "customer_email": "n.rahmani@email.com",
+            "arrival": d(3), "departure": d(9), "status": "Confirmed",
+            "rooms": [{"room": "303", "adults": 2, "rate": 2000}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+            "package": "Honeymoon Package",
+        },
+        {
+            "id": "F06",
+            "customer_email": "c.martinez@email.es",
+            "arrival": d(2), "departure": d(8), "status": "Confirmed",
+            "rooms": [{"room": "404", "adults": 2, "children": 2, "rate": 1600}],
+            "families": [{"family_type": "Family", "adults": 2, "children": 2}],
+        },
+        {
+            "id": "F07",
+            "customer_email": "o.belkacem@agency.dz",
+            "arrival": d(3), "departure": d(9), "status": "Confirmed",
+            "rooms": [{"room": "405", "adults": 2, "children": 3, "rate": 1600}],
+            "families": [{"family_type": "Family", "adults": 2, "children": 3}],
+        },
+        {
+            "id": "F08",
+            "customer_email": "y.hamdi@email.tn",
+            "arrival": d(2), "departure": d(8), "status": "Confirmed",
+            "rooms": [{"room": "406", "adults": 2, "children": 2, "rate": 1600}],
+            "families": [{"family_type": "Family", "adults": 2, "children": 2}],
+        },
+        {
+            "id": "F09",
+            "customer_email": "fatima.cherif@email.com",
+            "arrival": d(8), "departure": d(13), "status": "Confirmed",
+            "rooms": [{"room": "402", "adults": 2, "children": 2, "rate": 1600}],
+            "families": [{"family_type": "Family", "adults": 2, "children": 2}],
+        },
+        {
+            "id": "F10",
+            "customer_email": "k.messaoud@email.com",
+            "arrival": d(8), "departure": d(14), "status": "Confirmed",
+            "rooms": [{"room": "403", "adults": 2, "children": 1, "rate": 1600}],
+            "families": [{"family_type": "Family", "adults": 2, "children": 1}],
+        },
+        {
+            "id": "F11",
+            "customer_email": "liu.wei@email.cn",
+            "arrival": d(1), "departure": d(7), "status": "Confirmed",
+            "rooms": [{"room": "104", "adults": 2, "rate": 800}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+        },
+        {
+            "id": "F12",
+            "customer_email": "amina.b@email.com",
+            "arrival": d(8), "departure": d(14), "status": "Confirmed",
+            "rooms": [{"room": "202", "adults": 2, "rate": 1200}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+        },
+
+        # ── FAR FUTURE — MONTH 2 & 3 (+30 to +60) ─────────────────────────
+        {
+            "id": "M2A",
+            "customer_email": "p.dupont@email.fr",
+            "arrival": d(35), "departure": d(41), "status": "Confirmed",
+            "rooms": [{"room": "101", "adults": 2, "rate": 800}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+        },
+        {
+            "id": "M2B",
+            "customer_email": "n.rahmani@email.com",
+            "arrival": d(32), "departure": d(38), "status": "Confirmed",
+            "rooms": [{"room": "201", "adults": 2, "rate": 1200}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+        },
+        {
+            "id": "M2C",
+            "customer_email": "sarah.j@email.com",
+            "arrival": d(40), "departure": d(47), "status": "Confirmed",
+            "rooms": [{"room": "301", "adults": 2, "rate": 2000}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+            "package": "Honeymoon Package",
+        },
+        {
+            "id": "M2D",
+            "customer_email": "k.messaoud@email.com",
+            "arrival": d(30), "departure": d(37), "status": "Confirmed",
+            "rooms": [{"room": "401", "adults": 2, "children": 3, "rate": 1600}],
+            "families": [{"family_type": "Family", "adults": 2, "children": 3}],
+        },
+        {
+            "id": "M2E",
+            "customer_email": "c.martinez@email.es",
+            "arrival": d(30), "departure": d(35), "status": "Confirmed",
+            "rooms": [{"room": "105", "adults": 2, "rate": 800}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+        },
+        {
+            "id": "M2F",
+            "customer_email": "ahmed.benali@email.com",
+            "arrival": d(45), "departure": d(51), "status": "Confirmed",
+            "rooms": [{"room": "202", "adults": 2, "rate": 1200}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+        },
+
+        # ── DRAFT ───────────────────────────────────────────────────────────
+        {
+            "id": "DR1",
+            "customer_email": "n.rahmani@email.com",
+            "arrival": d(10), "departure": d(17), "status": "Draft",
+            "rooms": [{"room": "204", "adults": 2, "rate": 1200}],
+            "families": [{"family_type": "Couple", "adults": 2}],
+        },
+        {
+            "id": "DR2",
+            "customer_email": "o.belkacem@agency.dz",
+            "arrival": d(20), "departure": d(28), "status": "Draft",
+            "rooms": [{"room": "302", "adults": 2, "rate": 2000}],
             "families": [{"family_type": "Couple", "adults": 2}],
         },
     ]
@@ -429,10 +690,10 @@ def create_test_reservations(ok):
         try:
             customer = _get_customer_by_email(s["customer_email"])
             if not customer:
+                ok(f"    Skipped {s['id']}: customer not found ({s['customer_email']})")
                 skipped += 1
                 continue
 
-            # Check if this test reservation already exists via customer + arrival
             existing = frappe.db.exists("Hotel Reservation", {
                 "customer": customer,
                 "arrival_date": s["arrival"],
@@ -441,9 +702,6 @@ def create_test_reservations(ok):
             if existing:
                 skipped += 1
                 continue
-
-            rooms = s.get("rooms", [])
-            families = s.get("families", [])
 
             doc = frappe.get_doc({
                 "doctype": "Hotel Reservation",
@@ -456,11 +714,11 @@ def create_test_reservations(ok):
                 "notes": f"Test scenario {s['id']}",
                 "is_test_data": 1,
             })
-            for r in rooms:
+            for r in s.get("rooms", []):
                 r_item = {k: v for k, v in r.items()}
                 r_item["room_type"] = frappe.db.get_value("Hotel Room", r["room"], "room_type")
                 doc.append("rooms", r_item)
-            for f in families:
+            for f in s.get("families", []):
                 f_item = {k: v for k, v in f.items()}
                 f_item["total_guests"] = (f.get("adults", 0) + f.get("children", 0) + f.get("infants", 0))
                 doc.append("families", f_item)
@@ -470,7 +728,7 @@ def create_test_reservations(ok):
             created += 1
         except Exception as e:
             frappe.db.rollback()
-            ok(f"    Skipped scenario {s['id']}: {e}")
+            ok(f"    Skipped {s['id']}: {e}")
             skipped += 1
 
     ok(f"  Reservations: {created} created, {skipped} skipped (of {len(scenarios)})")
@@ -479,34 +737,41 @@ def create_test_reservations(ok):
 # ─── Stays ────────────────────────────────────────────────────────────────────
 
 def create_test_stays(ok):
-    today = nowdate()
-    checked_in = frappe.get_all("Hotel Reservation",
-        filters={"status": "Checked In", "is_test_data": 1},
-        pluck="name")
-
+    """
+    Create stays for:
+      - "Checked In"  reservations → status "Active"     (room stays Occupied)
+      - "Completed"   reservations → status "Checked Out" (room stays Available)
+    """
     created = 0
-    for res_name in checked_in:
-        res = frappe.get_doc("Hotel Reservation", res_name)
-        # Skip if stays already exist for this reservation
-        existing = frappe.db.count("Hotel Stay", {"reservation": res_name})
-        if existing:
-            continue
 
-        for res_room in res.rooms:
-            stay = frappe.get_doc({
-                "doctype": "Hotel Stay",
-                "customer": res.customer,
-                "reservation": res_name,
-                "room": res_room.room,
-                "checkin_date": f"{res.arrival_date} 14:00:00",
-                "expected_checkout": res.departure_date,
-                "status": "Active",
-                "is_test_data": 1,
-            })
-            stay.insert(ignore_permissions=True)
-            # Mark room as occupied
-            frappe.db.set_value("Hotel Room", res_room.room, "status", "Occupied")
-            created += 1
+    for status_filter, stay_status, room_status in [
+        ("Checked In",  "Active",      "Occupied"),
+        ("Completed",   "Checked Out", "Available"),
+    ]:
+        reservations = frappe.get_all(
+            "Hotel Reservation",
+            filters={"status": status_filter, "is_test_data": 1},
+            pluck="name",
+        )
+        for res_name in reservations:
+            if frappe.db.count("Hotel Stay", {"reservation": res_name}):
+                continue
+
+            res = frappe.get_doc("Hotel Reservation", res_name)
+            for res_room in res.rooms:
+                stay = frappe.get_doc({
+                    "doctype": "Hotel Stay",
+                    "customer": res.customer,
+                    "reservation": res_name,
+                    "room": res_room.room,
+                    "checkin_date": f"{res.arrival_date} 14:00:00",
+                    "expected_checkout": res.departure_date,
+                    "status": stay_status,
+                    "is_test_data": 1,
+                })
+                stay.insert(ignore_permissions=True)
+                frappe.db.set_value("Hotel Room", res_room.room, "status", room_status)
+                created += 1
 
     ok(f"  Stays: {created} created")
 
@@ -514,39 +779,56 @@ def create_test_stays(ok):
 # ─── Folios ───────────────────────────────────────────────────────────────────
 
 def create_test_folios(ok):
-    today = nowdate()
-    stays = frappe.get_all("Hotel Stay",
-        filters={"status": "Active", "is_test_data": 1},
-        fields=["name", "customer", "reservation", "room", "checkin_date", "expected_checkout"])
+    """
+    Create folios for all stays (Active and Checked Out).
+      - Active stays      → status "Open" (partial charges so far)
+      - Checked Out stays → status "Paid" (full room charges for all nights)
+    Breakfast extras added for variety.
+    """
+    from frappe.utils import date_diff, getdate
+    from datetime import timedelta
 
     created = 0
+
+    stays = frappe.get_all(
+        "Hotel Stay",
+        filters={"is_test_data": 1},
+        fields=["name", "customer", "reservation", "room", "checkin_date", "expected_checkout", "status"],
+    )
+
     for stay in stays:
         if frappe.db.exists("Hotel Folio", {"stay": stay.name}):
             continue
 
         # Get room rate from reservation
-        rate = 0
+        rate = 800
         if stay.reservation:
-            res_room = frappe.db.get_value("Hotel Reservation Room",
-                {"parent": stay.reservation, "room": stay.room}, "rate")
-            rate = res_room or 800
+            res_rate = frappe.db.get_value(
+                "Hotel Reservation Room",
+                {"parent": stay.reservation, "room": stay.room},
+                "rate",
+            )
+            if res_rate:
+                rate = res_rate
+
+        checkin_str = getdate(stay.checkin_date).strftime("%Y-%m-%d")
+        nights = date_diff(stay.expected_checkout, checkin_str)
+        if nights < 1:
+            nights = 1
+
+        is_past = stay.status == "Checked Out"
+        folio_status = "Open" if not is_past else "Paid"
 
         folio = frappe.get_doc({
             "doctype": "Hotel Folio",
             "customer": stay.customer,
             "reservation": stay.reservation,
             "stay": stay.name,
-            "status": "Open",
+            "status": folio_status,
             "is_test_data": 1,
         })
 
-        # Add room charges for each night
-        from frappe.utils import date_diff, getdate
-        nights = date_diff(stay.expected_checkout, getdate(stay.checkin_date).strftime("%Y-%m-%d"))
-        if nights < 1:
-            nights = 1
-
-        from datetime import timedelta
+        # Room charge per night
         current_date = getdate(stay.checkin_date)
         for _n in range(nights):
             folio.append("items", {
@@ -561,19 +843,24 @@ def create_test_folios(ok):
             })
             current_date += timedelta(days=1)
 
-        # Add a breakfast charge
-        folio.append("items", {
-            "date": today,
-            "charge_type": "Breakfast",
-            "description": "Breakfast",
-            "quantity": 2,
-            "rate": 120,
-            "amount": 240,
-            "is_test_data": 1,
-        })
+        # Breakfast extras
+        breakfast_date = getdate(stay.checkin_date)
+        for _n in range(min(nights, 3)):
+            folio.append("items", {
+                "date": str(breakfast_date),
+                "charge_type": "Breakfast",
+                "description": "Breakfast × 2 guests",
+                "quantity": 2,
+                "rate": 120,
+                "amount": 240,
+                "is_test_data": 1,
+            })
+            breakfast_date += timedelta(days=1)
 
-        folio.total_charges = sum(i.amount for i in folio.items)
-        folio.balance = folio.total_charges
+        total = sum(i.amount for i in folio.items)
+        folio.total_charges = total
+        folio.total_payments = total if is_past else 0
+        folio.balance = 0 if is_past else total
         folio.insert(ignore_permissions=True)
         created += 1
 
@@ -583,19 +870,59 @@ def create_test_folios(ok):
 # ─── Payments ─────────────────────────────────────────────────────────────────
 
 def create_test_payments(ok):
-    folios = frappe.get_all("Hotel Folio",
-        filters={"status": "Open", "is_test_data": 1},
-        fields=["name", "customer", "reservation", "stay", "total_charges"])
+    """
+    Create payments for all folios that have no payment yet:
+      - Paid folios (past stays)    → full payment, dated at checkout
+      - Open folios (active stays)  → 50 % advance payment, dated today
+
+    Payment dates are spread across real reservation dates so the Revenue
+    Trend dashboard chart shows realistic data over 3 months.
+    """
+    from frappe.utils import getdate
+
+    METHODS = ["Cash", "Credit Card", "Bank Transfer", "Cash", "Credit Card"]
 
     created = 0
+
+    folios = frappe.get_all(
+        "Hotel Folio",
+        filters={"is_test_data": 1},
+        fields=["name", "customer", "reservation", "stay", "total_charges", "status"],
+    )
+
     for folio in folios:
         if frappe.db.exists("Hotel Payment", {"folio": folio.name}):
             continue
 
-        # Make an advance/partial payment for half the total
-        amount = round((folio.total_charges or 0) * 0.5, 2)
-        if amount <= 0:
+        total = folio.total_charges or 0
+        if total <= 0:
             continue
+
+        is_paid = folio.status == "Paid"
+
+        # Use checkout date for past stays so revenue appears on the correct month
+        pay_date = nowdate()
+        if is_paid and folio.stay:
+            checkout = frappe.db.get_value("Hotel Stay", folio.stay, "expected_checkout")
+            if checkout:
+                pay_date = str(checkout)
+
+        # Pick payment method deterministically from folio name
+        idx = sum(ord(c) for c in folio.name) % len(METHODS)
+        method = METHODS[idx]
+
+        if is_paid:
+            # Full settlement
+            amount = total
+            pay_type = "Full"
+            new_folio_status = "Paid"
+            remaining = 0.0
+        else:
+            # 50 % advance
+            amount = round(total * 0.5, 2)
+            pay_type = "Partial"
+            new_folio_status = "Partially Paid"
+            remaining = round(total - amount, 2)
 
         payment = frappe.get_doc({
             "doctype": "Hotel Payment",
@@ -603,19 +930,18 @@ def create_test_payments(ok):
             "reservation": folio.reservation,
             "stay": folio.stay,
             "folio": folio.name,
-            "payment_date": nowdate(),
-            "payment_type": "Partial",
-            "payment_method": "Cash",
+            "payment_date": pay_date,
+            "payment_type": pay_type,
+            "payment_method": method,
             "amount": amount,
             "is_test_data": 1,
         })
         payment.insert(ignore_permissions=True)
 
-        # Update folio balance
         frappe.db.set_value("Hotel Folio", folio.name, {
             "total_payments": amount,
-            "balance": (folio.total_charges or 0) - amount,
-            "status": "Partially Paid",
+            "balance": remaining,
+            "status": new_folio_status,
         })
         created += 1
 
