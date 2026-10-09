@@ -5,7 +5,7 @@
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
- "field_order": ["customer", "reservation", "room", "checkin_date", "expected_checkout", "actual_checkout", "status", "is_test_data"],
+ "field_order": ["customer", "guest_name", "reservation", "room", "checkin_date", "expected_checkout", "actual_checkout", "status", "is_test_data"],
  "fields": [
   {
    "fieldname": "customer",
@@ -14,6 +14,14 @@
    "label": "Customer",
    "options": "Hotel Customer",
    "reqd": 1
+  },
+  {
+   "fetch_from": "customer.full_name",
+   "fieldname": "guest_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Guest Name",
+   "read_only": 1
   },
   {
    "fieldname": "reservation",

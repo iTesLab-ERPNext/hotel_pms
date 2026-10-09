@@ -5,7 +5,7 @@
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
- "field_order": ["room_number", "room_name", "room_type", "floor", "capacity", "status", "housekeeping_status", "description", "active", "is_test_data"],
+ "field_order": ["room_number", "room_name", "room_type", "floor", "capacity", "base_rate", "status", "housekeeping_status", "description", "active", "is_test_data"],
  "fields": [
   {
    "fieldname": "room_number",
@@ -38,6 +38,12 @@
    "fieldname": "capacity",
    "fieldtype": "Int",
    "label": "Capacity"
+  },
+  {
+   "fieldname": "base_rate",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Base Rate (per night)"
   },
   {
    "default": "Available",

@@ -40,27 +40,35 @@ def get_dashboard_data():
         res_stats[status.lower().replace(" ", "_")] = frappe.db.count(
             "Hotel Reservation", {"status": status})
 
-    today_payments = frappe.db.sql("""
-        SELECT COALESCE(SUM(amount), 0)
-        FROM `tabHotel Payment`
-        WHERE payment_date = %s AND docstatus != 2
-    """, today)[0][0] or 0
+    # Today's payments via Frappe ORM
+    today_pmt_rows = frappe.get_all(
+        "Hotel Payment",
+        filters={"payment_date": today, "docstatus": ["!=", 2]},
+        fields=["amount"],
+    )
+    today_payments = sum(float(p.amount or 0) for p in today_pmt_rows)
 
-    outstanding = frappe.db.sql("""
-        SELECT COALESCE(SUM(balance), 0)
-        FROM `tabHotel Folio`
-        WHERE status != 'Closed' AND balance > 0
-    """)[0][0] or 0
+    # Outstanding balance across all open folios
+    open_folio_rows = frappe.get_all(
+        "Hotel Folio",
+        filters={"status": ["not in", ["Closed"]], "balance": [">", 0]},
+        fields=["balance"],
+    )
+    outstanding = sum(float(f.balance or 0) for f in open_folio_rows)
 
     open_folios = frappe.db.count(
         "Hotel Folio", {"status": ["in", ["Open", "Partially Paid"]]})
 
-    month_start = frappe.utils.get_first_day(today)
-    month_payments = frappe.db.sql("""
-        SELECT COALESCE(SUM(amount), 0)
-        FROM `tabHotel Payment`
-        WHERE payment_date >= %s AND payment_date <= %s AND docstatus != 2
-    """, (month_start, today))[0][0] or 0
+    month_start = str(frappe.utils.get_first_day(today))
+    month_pmt_rows = frappe.get_all(
+        "Hotel Payment",
+        filters={
+            "payment_date": ["between", [month_start, today]],
+            "docstatus": ["!=", 2],
+        },
+        fields=["amount"],
+    )
+    month_payments = sum(float(p.amount or 0) for p in month_pmt_rows)
 
     return {
         "rooms": room_stats,
@@ -93,18 +101,32 @@ def get_room_board_data():
         order_by="floor asc, room_number asc",
     )
 
-    # Active stays: room → stay name + guest name + balance
-    active_stays = frappe.db.sql("""
-        SELECT
-            hs.room,
-            hs.name   AS stay,
-            hs.guest_name,
-            hf.balance
-        FROM `tabHotel Stay` hs
-        LEFT JOIN `tabHotel Folio` hf ON hf.stay = hs.name
-        WHERE hs.status = 'Active'
-    """, as_dict=True)
-    stay_map = {s.room: s for s in active_stays}
+    # Active stays using Frappe ORM
+    active_stays = frappe.get_all(
+        "Hotel Stay",
+        filters={"status": "Active"},
+        fields=["name", "room", "guest_name"],
+    )
+    stay_names = [s.name for s in active_stays]
+
+    # Batch-fetch folio balances for all active stays at once
+    folio_balance_map = {}
+    if stay_names:
+        folios = frappe.get_all(
+            "Hotel Folio",
+            filters={"stay": ["in", stay_names]},
+            fields=["stay", "balance"],
+        )
+        folio_balance_map = {f.stay: float(f.balance or 0) for f in folios}
+
+    stay_map = {
+        s.room: frappe._dict(
+            stay=s.name,
+            guest_name=s.guest_name,
+            balance=folio_balance_map.get(s.name, 0.0),
+        )
+        for s in active_stays
+    }
 
     # Room type names
     type_names = {
@@ -136,20 +158,28 @@ def get_room_availability(arrival_date, departure_date, room_type=None):
         "Hotel Room", filters=filters,
         fields=["name", "room_number", "room_name", "room_type", "floor", "capacity", "status"])
 
-    busy_rooms = frappe.db.sql("""
-        SELECT DISTINCT rr.room
-        FROM `tabHotel Reservation Room` rr
-        JOIN `tabHotel Reservation` r ON r.name = rr.parent
-        WHERE r.status NOT IN ('Cancelled', 'No Show', 'Completed')
-          AND r.arrival_date < %s
-          AND r.departure_date > %s
-    """, (departure_date, arrival_date), as_dict=True)
-    busy_names = {b.room for b in busy_rooms}
+    # Reservations overlapping the date range (Frappe ORM + db.sql for complex overlap)
+    overlapping_res = frappe.get_all(
+        "Hotel Reservation",
+        filters={
+            "status": ["not in", ["Cancelled", "No Show", "Completed"]],
+            "arrival_date": ["<", departure_date],
+            "departure_date": [">", arrival_date],
+        },
+        fields=["name"],
+    )
+    busy_names = set()
+    for res in overlapping_res:
+        rooms_in_res = frappe.get_all(
+            "Hotel Reservation Room",
+            filters={"parent": res.name},
+            fields=["room"],
+        )
+        busy_names.update(r.room for r in rooms_in_res if r.room)
 
-    active_stays = frappe.db.sql(
-        "SELECT DISTINCT room FROM `tabHotel Stay` WHERE status = 'Active'",
-        as_dict=True)
-    busy_names.update(s.room for s in active_stays)
+    active_stays = frappe.get_all(
+        "Hotel Stay", filters={"status": "Active"}, fields=["room"])
+    busy_names.update(s.room for s in active_stays if s.room)
 
     return [r for r in all_rooms if r.name not in busy_names]
 
@@ -316,14 +346,16 @@ def get_revenue_trend(days=14):
     today = nowdate()
     labels, values = [], []
     for i in range(int(days) - 1, -1, -1):
-        day = add_days(today, -i)
-        total = frappe.db.sql("""
-            SELECT COALESCE(SUM(amount), 0)
-            FROM `tabHotel Payment`
-            WHERE payment_date = %s AND docstatus != 2
-        """, day)[0][0] or 0
-        labels.append(str(day))
-        values.append(float(total))
+        day = str(add_days(today, -i))
+        # Use Frappe ORM to fetch all payments on this day
+        day_payments = frappe.get_all(
+            "Hotel Payment",
+            filters={"payment_date": day, "docstatus": ["!=", 2]},
+            fields=["amount"],
+        )
+        total = sum(float(p.amount or 0) for p in day_payments)
+        labels.append(day)
+        values.append(total)
     return {"labels": labels, "values": values}
 
 
@@ -334,31 +366,33 @@ def get_occupancy_trend(days=14):
     total_rooms = frappe.db.count("Hotel Room", {"active": 1}) or 1
     labels, values = [], []
     for i in range(int(days) - 1, -1, -1):
-        day = add_days(today, -i)
-        day_str = str(day)
-        occupied = frappe.db.sql("""
-            SELECT COUNT(DISTINCT room) FROM `tabHotel Stay`
-            WHERE status = 'Active'
-              AND DATE(checkin_date) <= %s
-              AND (expected_checkout > %s OR expected_checkout IS NULL)
-        """, (day_str, day_str))[0][0] or 0
-        labels.append(day_str)
-        values.append(round(occupied / total_rooms * 100, 1))
+        day = str(add_days(today, -i))
+        # Stays whose checkin <= day and expected_checkout > day (i.e. active on that day)
+        occupied = frappe.db.count(
+            "Hotel Stay",
+            {"checkin_date": ["<=", day], "expected_checkout": [">", day]},
+        )
+        labels.append(day)
+        values.append(round((occupied or 0) / total_rooms * 100, 1))
     return {"labels": labels, "values": values}
 
 
 @frappe.whitelist()
 def get_revenue_by_type():
     """Return revenue grouped by charge_type for the current month."""
-    month_start = frappe.utils.get_first_day(nowdate())
-    rows = frappe.db.sql("""
-        SELECT charge_type, COALESCE(SUM(amount), 0) AS total
-        FROM `tabHotel Folio Item`
-        WHERE date >= %s
-        GROUP BY charge_type
-        ORDER BY total DESC
-    """, month_start, as_dict=True)
+    month_start = str(frappe.utils.get_first_day(nowdate()))
+    folio_items = frappe.get_all(
+        "Hotel Folio Item",
+        filters={"date": [">=", month_start]},
+        fields=["charge_type", "amount"],
+    )
+    totals = {}
+    for item in folio_items:
+        ct = item.charge_type or "Other"
+        totals[ct] = totals.get(ct, 0) + float(item.amount or 0)
+    # Sort by value desc
+    sorted_items = sorted(totals.items(), key=lambda x: -x[1])
     return {
-        "labels": [r.charge_type or "Other" for r in rows],
-        "values": [float(r.total) for r in rows],
+        "labels": [k for k, _ in sorted_items],
+        "values": [v for _, v in sorted_items],
     }

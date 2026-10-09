@@ -2,7 +2,7 @@
  "doctype": "Workspace",
  "category": "Modules",
  "charts": [],
- "content": "[{\"id\":\"shortcuts\",\"type\":\"shortcut\"},{\"id\":\"card-masters\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\"}},{\"id\":\"card-dashboards\",\"type\":\"card\",\"data\":{\"card_name\":\"Dashboards\"}},{\"id\":\"card-reports\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\"}},{\"id\":\"card-operations\",\"type\":\"card\",\"data\":{\"card_name\":\"Operations\"}}]",
+ "content": "[{\"id\":\"getting-started\",\"type\":\"onboarding\",\"data\":{\"onboarding_name\":\"Hotel PMS\"}},{\"id\":\"shortcuts\",\"type\":\"shortcut\"},{\"id\":\"card-masters\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\"}},{\"id\":\"card-operations\",\"type\":\"card\",\"data\":{\"card_name\":\"Operations\"}},{\"id\":\"card-dashboards\",\"type\":\"card\",\"data\":{\"card_name\":\"Dashboards\"}},{\"id\":\"card-reports\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\"}}]",
  "hide_custom": 0,
  "is_hidden": 0,
  "label": "Hotel PMS",
@@ -10,7 +10,7 @@
   {
    "label": "Masters",
    "type": "Card Break",
-   "icon": null,
+   "icon": "hotel",
    "hidden": null
   },
   {
@@ -38,12 +38,50 @@
    "label": "Hotel Service",
    "type": "Link",
    "link_type": "DocType",
-   "link_to": "Hotel Service"
+   "link_to": "Hotel Service",
+   "onboard": 1
+  },
+  {
+   "label": "Operations",
+   "type": "Card Break",
+   "icon": "activity",
+   "hidden": null
+  },
+  {
+   "label": "Hotel Reservation",
+   "type": "Link",
+   "link_type": "DocType",
+   "link_to": "Hotel Reservation",
+   "onboard": 1
+  },
+  {
+   "label": "Hotel Stay",
+   "type": "Link",
+   "link_type": "DocType",
+   "link_to": "Hotel Stay"
+  },
+  {
+   "label": "Hotel Folio",
+   "type": "Link",
+   "link_type": "DocType",
+   "link_to": "Hotel Folio"
+  },
+  {
+   "label": "Hotel Payment",
+   "type": "Link",
+   "link_type": "DocType",
+   "link_to": "Hotel Payment"
+  },
+  {
+   "label": "Hotel Housekeeping",
+   "type": "Link",
+   "link_type": "DocType",
+   "link_to": "Hotel Housekeeping"
   },
   {
    "label": "Dashboards",
    "type": "Card Break",
-   "icon": null,
+   "icon": "bar-chart",
    "hidden": null
   },
   {
@@ -65,21 +103,21 @@
    "link_to": "room-planning"
   },
   {
-   "label": "Test Data Manager",
-   "type": "Link",
-   "link_type": "Page",
-   "link_to": "hotel-pms-test-data"
-  },
-  {
    "label": "Reservation Calendar",
    "type": "Link",
    "link_type": "DocType",
    "link_to": "Hotel Reservation"
   },
   {
+   "label": "Test Data Manager",
+   "type": "Link",
+   "link_type": "Page",
+   "link_to": "hotel-pms-test-data"
+  },
+  {
    "label": "Reports",
    "type": "Card Break",
-   "icon": null,
+   "icon": "list",
    "hidden": null
   },
   {
@@ -117,43 +155,6 @@
    "type": "Link",
    "link_type": "Report",
    "link_to": "Revenue by Charge Type"
-  },
-  {
-   "label": "Operations",
-   "type": "Card Break",
-   "icon": null,
-   "hidden": null
-  },
-  {
-   "label": "Hotel Reservation",
-   "type": "Link",
-   "link_type": "DocType",
-   "link_to": "Hotel Reservation",
-   "onboard": 1
-  },
-  {
-   "label": "Hotel Stay",
-   "type": "Link",
-   "link_type": "DocType",
-   "link_to": "Hotel Stay"
-  },
-  {
-   "label": "Hotel Folio",
-   "type": "Link",
-   "link_type": "DocType",
-   "link_to": "Hotel Folio"
-  },
-  {
-   "label": "Hotel Payment",
-   "type": "Link",
-   "link_type": "DocType",
-   "link_to": "Hotel Payment"
-  },
-  {
-   "label": "Hotel Housekeeping",
-   "type": "Link",
-   "link_type": "DocType",
-   "link_to": "Hotel Housekeeping"
   }
  ],
  "module": "Hotel",
@@ -190,7 +191,7 @@
    "format": "{} Pending",
    "label": "Housekeeping",
    "link_to": "Hotel Housekeeping",
-   "stats_filter": "{\"status\": [\"in\", [\"Pending\", \"In Progress\"]]}",
+   "stats_filter": "{\"new_status\": [\"in\", [\"Dirty\", \"Cleaning\"]]}",
    "type": "DocType"
   },
   {

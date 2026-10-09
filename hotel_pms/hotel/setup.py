@@ -251,8 +251,9 @@ def ensure_demo_reservations() -> None:
                 child_field: [{
                     "room": room.name,
                     "room_type": room.room_type,
-                    "rate_per_night": rate,
-                    "total_amount": rate * nights,
+                    "rate": rate,
+                    "nights": nights,
+                    "amount": rate * nights,
                 }],
             })
             res_doc.insert(ignore_permissions=True)

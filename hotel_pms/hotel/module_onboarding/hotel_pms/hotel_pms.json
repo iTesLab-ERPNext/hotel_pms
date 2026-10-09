@@ -1,0 +1,57 @@
+{
+ "doctype": "Module Onboarding",
+ "documentation_url": "",
+ "is_complete": 0,
+ "label": "Hotel PMS",
+ "module": "Hotel",
+ "name": "Hotel PMS",
+ "steps": [
+  {
+   "action": "Create Entry",
+   "action_label": "Create your first Room Type",
+   "creation_doctype": "Hotel Room Type",
+   "description": "Set up room types like Single, Double, Suite, etc.",
+   "is_complete": 0,
+   "reference_document": "Hotel Room Type",
+   "title": "Setup Room Types"
+  },
+  {
+   "action": "Create Entry",
+   "action_label": "Add Hotel Rooms",
+   "creation_doctype": "Hotel Room",
+   "description": "Add your hotel rooms with room numbers, types and rates.",
+   "is_complete": 0,
+   "reference_document": "Hotel Room",
+   "title": "Add Rooms"
+  },
+  {
+   "action": "Create Entry",
+   "action_label": "Add a Customer",
+   "creation_doctype": "Hotel Customer",
+   "description": "Register guests to manage their reservations and folios.",
+   "is_complete": 0,
+   "reference_document": "Hotel Customer",
+   "title": "Add Customers"
+  },
+  {
+   "action": "Create Entry",
+   "action_label": "Create a Reservation",
+   "creation_doctype": "Hotel Reservation",
+   "description": "Book rooms for guests with check-in and check-out dates.",
+   "is_complete": 0,
+   "reference_document": "Hotel Reservation",
+   "title": "Create First Reservation"
+  },
+  {
+   "action": "Go to Page",
+   "action_label": "View Hotel Dashboard",
+   "description": "Monitor occupancy, revenue and daily operations from the dashboard.",
+   "is_complete": 0,
+   "path": "/hotel-pms-dashboard",
+   "title": "Explore the Dashboard"
+  }
+ ],
+ "subtitle": "Setup your hotel property and start managing reservations",
+ "success_message": "Your Hotel PMS is ready! Start accepting reservations.",
+ "title": "Get Started with Hotel PMS"
+}
