@@ -213,6 +213,42 @@
    "label": "Room Board",
    "link_to": "room-board",
    "type": "Page"
+  },
+  {
+   "color": "Blue",
+   "label": "Daily Occupancy",
+   "link_to": "Daily Room Occupancy",
+   "type": "Report"
+  },
+  {
+   "color": "Green",
+   "label": "Arrivals & Departures",
+   "link_to": "Arrivals and Departures",
+   "type": "Report"
+  },
+  {
+   "color": "Purple",
+   "label": "In-House Folios",
+   "link_to": "In-House Guest Folio Summary",
+   "type": "Report"
+  },
+  {
+   "color": "Yellow",
+   "label": "Housekeeping Board",
+   "link_to": "Housekeeping Status Board",
+   "type": "Report"
+  },
+  {
+   "color": "Red",
+   "label": "Service Requests",
+   "link_to": "Service Request Report",
+   "type": "Report"
+  },
+  {
+   "color": "Orange",
+   "label": "Revenue by Type",
+   "link_to": "Revenue by Charge Type",
+   "type": "Report"
   }
  ],
  "title": "Hotel PMS"
