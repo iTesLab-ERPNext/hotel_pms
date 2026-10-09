@@ -29,6 +29,7 @@
  "module": "Hotel",
  "name": "Daily Room Occupancy",
  "report_name": "Daily Room Occupancy",
+ "ref_doctype": "Hotel Room",
  "report_type": "Script Report",
  "roles": [
   {"role": "Hotel Manager"},

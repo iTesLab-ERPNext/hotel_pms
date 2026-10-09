@@ -30,6 +30,7 @@
  "module": "Hotel",
  "name": "Housekeeping Status Board",
  "report_name": "Housekeeping Status Board",
+ "ref_doctype": "Hotel Room",
  "report_type": "Script Report",
  "roles": [
   {"role": "Hotel Manager"},

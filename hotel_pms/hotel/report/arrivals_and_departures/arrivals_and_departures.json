@@ -30,6 +30,7 @@
  "module": "Hotel",
  "name": "Arrivals and Departures",
  "report_name": "Arrivals and Departures",
+ "ref_doctype": "Hotel Reservation",
  "report_type": "Script Report",
  "roles": [
   {"role": "Hotel Manager"},

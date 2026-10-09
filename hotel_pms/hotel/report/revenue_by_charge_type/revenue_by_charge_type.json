@@ -29,6 +29,7 @@
  "module": "Hotel",
  "name": "Revenue by Charge Type",
  "report_name": "Revenue by Charge Type",
+ "ref_doctype": "Hotel Folio",
  "report_type": "Script Report",
  "roles": [
   {"role": "Hotel Manager"},

@@ -36,6 +36,7 @@
  "module": "Hotel",
  "name": "Service Request Report",
  "report_name": "Service Request Report",
+ "ref_doctype": "Hotel Folio",
  "report_type": "Script Report",
  "roles": [
   {"role": "Hotel Manager"},
