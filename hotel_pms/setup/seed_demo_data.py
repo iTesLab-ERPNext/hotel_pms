@@ -880,7 +880,7 @@ def create_test_payments(ok):
     """
     from frappe.utils import getdate
 
-    METHODS = ["Cash", "Credit Card", "Bank Transfer", "Cash", "Credit Card"]
+    METHODS = ["Cash", "Card", "Bank Transfer", "Cash", "Card"]
 
     created = 0
 
