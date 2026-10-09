@@ -76,8 +76,8 @@ def _data(filters):
             DATEDIFF(CURDATE(), DATE(hs.checkin_date)) AS nights_so_far,
             hf.name            AS folio,
             hf.status          AS folio_status,
-            COALESCE(hf.total_amount, 0) AS total_charges,
-            COALESCE(hf.total_paid,   0) AS total_payments,
+            COALESCE(hf.total_charges, 0) AS total_charges,
+            COALESCE(hf.total_payments, 0) AS total_payments,
             COALESCE(hf.balance,      0) AS balance
         FROM `tabHotel Stay` hs
         LEFT JOIN `tabHotel Customer` hc  ON hc.name  = hs.customer

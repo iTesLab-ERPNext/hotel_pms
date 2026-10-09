@@ -15,25 +15,36 @@ from frappe.utils import nowdate, add_days, now_datetime
 def seed():
     """Create all test data. Safe to call multiple times (idempotent)."""
     log = []
+    errors = []
 
     def ok(msg):
         print(msg)
         log.append(msg)
 
-    create_test_room_types(ok)
-    create_test_rooms(ok)
-    create_test_services(ok)
-    create_test_packages(ok)
-    create_test_customers(ok)
-    create_test_reservations(ok)
-    create_test_stays(ok)
-    create_test_folios(ok)
-    create_test_payments(ok)
-    create_test_housekeeping(ok)
+    def run(fn):
+        try:
+            fn(ok)
+        except Exception as e:
+            msg = f"ERROR in {fn.__name__}: {e}"
+            print(msg)
+            log.append(msg)
+            errors.append(msg)
+            frappe.db.rollback()
+
+    run(create_test_room_types)
+    run(create_test_rooms)
+    run(create_test_services)
+    run(create_test_packages)
+    run(create_test_customers)
+    run(create_test_reservations)
+    run(create_test_stays)
+    run(create_test_folios)
+    run(create_test_payments)
+    run(create_test_housekeeping)
 
     frappe.db.commit()
     ok("=== Test data seeding complete ===")
-    return {"log": log}
+    return {"log": log, "errors": errors}
 
 
 @frappe.whitelist()

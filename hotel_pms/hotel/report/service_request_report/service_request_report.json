@@ -28,7 +28,7 @@
    "fieldname": "charge_type",
    "fieldtype": "Select",
    "label": "Charge Type",
-   "options": "\nRoom\nF&B\nLaundry\nSpa\nTransport\nMinibar\nOther",
+   "options": "\nRoom\nBreakfast\nRestaurant\nSpa\nLaundry\nTransport\nHorse Riding\nExtra Bed\nOther",
    "reqd": 0
   }
  ],
