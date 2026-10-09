@@ -1,0 +1,22 @@
+{
+ "chart_name": "Hotel Occupancy Trend",
+ "chart_type": "Count",
+ "color": "#2490ef",
+ "creation": "2026-10-09 00:00:00.000000",
+ "custom_options": "",
+ "doctype": "Dashboard Chart",
+ "document_type": "Hotel Stay",
+ "dynamic_filters_json": "[]",
+ "filters_json": "[{\"fieldname\": \"status\", \"operator\": \"=\", \"value\": \"Active\"}]",
+ "is_public": 1,
+ "is_standard": 1,
+ "module": "Hotel",
+ "name": "Hotel Occupancy Trend",
+ "owner": "Administrator",
+ "based_on": "checkin_date",
+ "time_interval": "Monthly",
+ "timeseries": 1,
+ "timespan": "Last Year",
+ "type": "Bar",
+ "use_report_chart": 0
+}

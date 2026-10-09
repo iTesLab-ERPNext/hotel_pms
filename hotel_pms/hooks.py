@@ -31,8 +31,9 @@ standard_navbar_items = [
 
 # ── Fixtures — exported/imported by bench export-fixtures / import-fixtures ────
 fixtures = [
-    {"dt": "Role",       "filters": [["name", "in", ["Hotel Manager", "Front Desk", "Housekeeping", "Cashier"]]]},
-    {"dt": "Workspace",  "filters": [["name", "=", "Hotel PMS"]]},
+    {"dt": "Role",            "filters": [["name", "in", ["Hotel Manager", "Front Desk", "Housekeeping", "Cashier"]]]},
+    {"dt": "Workspace",       "filters": [["name", "=", "Hotel PMS"]]},
+    {"dt": "Dashboard Chart", "filters": [["name", "in", ["Hotel Revenue Trend", "Hotel Occupancy Trend"]]]},
     {"dt": "Hotel Customer Category"},
     {"dt": "Hotel Family Type"},
     {"dt": "Hotel Room Type"},

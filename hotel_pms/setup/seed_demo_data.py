@@ -424,47 +424,56 @@ def create_test_reservations(ok):
     ]
 
     created = 0
+    skipped = 0
     for s in scenarios:
-        customer = _get_customer_by_email(s["customer_email"])
-        if not customer:
-            continue
+        try:
+            customer = _get_customer_by_email(s["customer_email"])
+            if not customer:
+                skipped += 1
+                continue
 
-        # Check if this test reservation already exists via customer + arrival
-        existing = frappe.db.exists("Hotel Reservation", {
-            "customer": customer,
-            "arrival_date": s["arrival"],
-            "is_test_data": 1,
-        })
-        if existing:
-            continue
+            # Check if this test reservation already exists via customer + arrival
+            existing = frappe.db.exists("Hotel Reservation", {
+                "customer": customer,
+                "arrival_date": s["arrival"],
+                "is_test_data": 1,
+            })
+            if existing:
+                skipped += 1
+                continue
 
-        rooms = s.get("rooms", [])
-        families = s.get("families", [])
+            rooms = s.get("rooms", [])
+            families = s.get("families", [])
 
-        doc = frappe.get_doc({
-            "doctype": "Hotel Reservation",
-            "customer": customer,
-            "booking_date": add_days(s["arrival"], -7),
-            "arrival_date": s["arrival"],
-            "departure_date": s["departure"],
-            "status": s["status"],
-            "package": s.get("package"),
-            "notes": f"Test scenario {s['id']}",
-            "is_test_data": 1,
-        })
-        for r in rooms:
-            r_item = {k: v for k, v in r.items()}
-            r_item["room_type"] = frappe.db.get_value("Hotel Room", r["room"], "room_type")
-            doc.append("rooms", r_item)
-        for f in families:
-            f_item = {k: v for k, v in f.items()}
-            f_item["total_guests"] = (f.get("adults", 0) + f.get("children", 0) + f.get("infants", 0))
-            doc.append("families", f_item)
+            doc = frappe.get_doc({
+                "doctype": "Hotel Reservation",
+                "customer": customer,
+                "booking_date": add_days(s["arrival"], -7),
+                "arrival_date": s["arrival"],
+                "departure_date": s["departure"],
+                "status": s["status"],
+                "package": s.get("package"),
+                "notes": f"Test scenario {s['id']}",
+                "is_test_data": 1,
+            })
+            for r in rooms:
+                r_item = {k: v for k, v in r.items()}
+                r_item["room_type"] = frappe.db.get_value("Hotel Room", r["room"], "room_type")
+                doc.append("rooms", r_item)
+            for f in families:
+                f_item = {k: v for k, v in f.items()}
+                f_item["total_guests"] = (f.get("adults", 0) + f.get("children", 0) + f.get("infants", 0))
+                doc.append("families", f_item)
 
-        doc.insert(ignore_permissions=True)
-        created += 1
+            doc.flags.ignore_validate = True
+            doc.insert(ignore_permissions=True)
+            created += 1
+        except Exception as e:
+            frappe.db.rollback()
+            ok(f"    Skipped scenario {s['id']}: {e}")
+            skipped += 1
 
-    ok(f"  Reservations: {created} created (of {len(scenarios)})")
+    ok(f"  Reservations: {created} created, {skipped} skipped (of {len(scenarios)})")
 
 
 # ─── Stays ────────────────────────────────────────────────────────────────────

@@ -1,0 +1,23 @@
+{
+ "chart_name": "Hotel Revenue Trend",
+ "chart_type": "Sum",
+ "color": "#5e64ff",
+ "creation": "2026-10-09 00:00:00.000000",
+ "custom_options": "",
+ "doctype": "Dashboard Chart",
+ "document_type": "Hotel Payment",
+ "dynamic_filters_json": "[]",
+ "filters_json": "[]",
+ "is_public": 1,
+ "is_standard": 1,
+ "module": "Hotel",
+ "name": "Hotel Revenue Trend",
+ "owner": "Administrator",
+ "based_on": "payment_date",
+ "value_based_on": "amount",
+ "time_interval": "Monthly",
+ "timeseries": 1,
+ "timespan": "Last Year",
+ "type": "Line",
+ "use_report_chart": 0
+}

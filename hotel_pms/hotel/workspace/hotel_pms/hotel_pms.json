@@ -1,8 +1,11 @@
 {
  "doctype": "Workspace",
  "category": "Modules",
- "charts": [],
- "content": "[{\"id\":\"getting-started\",\"type\":\"onboarding\",\"data\":{\"onboarding_name\":\"Hotel PMS\"}},{\"id\":\"shortcuts\",\"type\":\"shortcut\"},{\"id\":\"card-masters\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\"}},{\"id\":\"card-operations\",\"type\":\"card\",\"data\":{\"card_name\":\"Operations\"}},{\"id\":\"card-dashboards\",\"type\":\"card\",\"data\":{\"card_name\":\"Dashboards\"}},{\"id\":\"card-reports\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\"}}]",
+ "charts": [
+  {"chart_name": "Hotel Revenue Trend"},
+  {"chart_name": "Hotel Occupancy Trend"}
+ ],
+ "content": "[{\"id\":\"getting-started\",\"type\":\"onboarding\",\"data\":{\"onboarding_name\":\"Hotel PMS\"}},{\"id\":\"chart-revenue\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Hotel Revenue Trend\"}},{\"id\":\"chart-occupancy\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Hotel Occupancy Trend\"}},{\"id\":\"shortcuts\",\"type\":\"shortcut\"},{\"id\":\"card-masters\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\"}},{\"id\":\"card-operations\",\"type\":\"card\",\"data\":{\"card_name\":\"Operations\"}},{\"id\":\"card-dashboards\",\"type\":\"card\",\"data\":{\"card_name\":\"Dashboards\"}},{\"id\":\"card-reports\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\"}}]",
  "hide_custom": 0,
  "is_hidden": 0,
  "label": "Hotel PMS",
