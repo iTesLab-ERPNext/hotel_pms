@@ -1,0 +1,38 @@
+{
+ "add_total_row": 1,
+ "columns": [],
+ "creation": "2026-10-09 00:00:00.000000",
+ "disabled": 0,
+ "doctype": "Report",
+ "filters": [
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "From Date",
+   "reqd": 0
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "To Date",
+   "reqd": 0
+  },
+  {
+   "fieldname": "group_by",
+   "fieldtype": "Select",
+   "label": "Group By",
+   "options": "Charge Type\nDay\nMonth",
+   "reqd": 0
+  }
+ ],
+ "is_standard": "Yes",
+ "module": "Hotel",
+ "name": "Revenue by Charge Type",
+ "report_name": "Revenue by Charge Type",
+ "report_type": "Script Report",
+ "roles": [
+  {"role": "Hotel Manager"},
+  {"role": "Cashier"},
+  {"role": "System Manager"}
+ ]
+}

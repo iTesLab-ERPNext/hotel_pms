@@ -1,0 +1,39 @@
+{
+ "add_total_row": 0,
+ "columns": [],
+ "creation": "2026-10-09 00:00:00.000000",
+ "disabled": 0,
+ "doctype": "Report",
+ "filters": [
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date",
+   "reqd": 0
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "\nArrivals\nDepartures",
+   "reqd": 0
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "\nConfirmed\nChecked In\nCompleted",
+   "reqd": 0
+  }
+ ],
+ "is_standard": "Yes",
+ "module": "Hotel",
+ "name": "Arrivals and Departures",
+ "report_name": "Arrivals and Departures",
+ "report_type": "Script Report",
+ "roles": [
+  {"role": "Hotel Manager"},
+  {"role": "Front Desk"},
+  {"role": "System Manager"}
+ ]
+}

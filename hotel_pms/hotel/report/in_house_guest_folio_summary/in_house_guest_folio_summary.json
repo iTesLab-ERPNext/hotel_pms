@@ -1,0 +1,39 @@
+{
+ "add_total_row": 1,
+ "columns": [],
+ "creation": "2026-10-09 00:00:00.000000",
+ "disabled": 0,
+ "doctype": "Report",
+ "filters": [
+  {
+   "fieldname": "room_type",
+   "fieldtype": "Link",
+   "label": "Room Type",
+   "options": "Hotel Room Type",
+   "reqd": 0
+  },
+  {
+   "fieldname": "floor",
+   "fieldtype": "Int",
+   "label": "Floor",
+   "reqd": 0
+  },
+  {
+   "fieldname": "balance_due",
+   "fieldtype": "Check",
+   "label": "Balance Due Only",
+   "reqd": 0
+  }
+ ],
+ "is_standard": "Yes",
+ "module": "Hotel",
+ "name": "In-House Guest Folio Summary",
+ "report_name": "In-House Guest Folio Summary",
+ "report_type": "Script Report",
+ "roles": [
+  {"role": "Hotel Manager"},
+  {"role": "Front Desk"},
+  {"role": "Cashier"},
+  {"role": "System Manager"}
+ ]
+}

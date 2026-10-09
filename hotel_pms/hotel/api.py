@@ -325,3 +325,40 @@ def get_revenue_trend(days=14):
         labels.append(str(day))
         values.append(float(total))
     return {"labels": labels, "values": values}
+
+
+@frappe.whitelist()
+def get_occupancy_trend(days=14):
+    """Return daily occupancy % for the last N days."""
+    today = nowdate()
+    total_rooms = frappe.db.count("Hotel Room", {"active": 1}) or 1
+    labels, values = [], []
+    for i in range(int(days) - 1, -1, -1):
+        day = add_days(today, -i)
+        day_str = str(day)
+        occupied = frappe.db.sql("""
+            SELECT COUNT(DISTINCT room) FROM `tabHotel Stay`
+            WHERE status = 'Active'
+              AND DATE(checkin_date) <= %s
+              AND (expected_checkout > %s OR expected_checkout IS NULL)
+        """, (day_str, day_str))[0][0] or 0
+        labels.append(day_str)
+        values.append(round(occupied / total_rooms * 100, 1))
+    return {"labels": labels, "values": values}
+
+
+@frappe.whitelist()
+def get_revenue_by_type():
+    """Return revenue grouped by charge_type for the current month."""
+    month_start = frappe.utils.get_first_day(nowdate())
+    rows = frappe.db.sql("""
+        SELECT charge_type, COALESCE(SUM(amount), 0) AS total
+        FROM `tabHotel Folio Item`
+        WHERE date >= %s
+        GROUP BY charge_type
+        ORDER BY total DESC
+    """, month_start, as_dict=True)
+    return {
+        "labels": [r.charge_type or "Other" for r in rows],
+        "values": [float(r.total) for r in rows],
+    }

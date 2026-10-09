@@ -2,7 +2,7 @@
  "doctype": "Workspace",
  "category": "Modules",
  "charts": [],
- "content": "[{\"id\":\"shortcuts\",\"type\":\"shortcut\"},{\"id\":\"card-masters\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\"}},{\"id\":\"card-dashboards\",\"type\":\"card\",\"data\":{\"card_name\":\"Dashboards\"}},{\"id\":\"card-reports\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\"}}]",
+ "content": "[{\"id\":\"shortcuts\",\"type\":\"shortcut\"},{\"id\":\"card-masters\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\"}},{\"id\":\"card-dashboards\",\"type\":\"card\",\"data\":{\"card_name\":\"Dashboards\"}},{\"id\":\"card-reports\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\"}},{\"id\":\"card-operations\",\"type\":\"card\",\"data\":{\"card_name\":\"Operations\"}}]",
  "hide_custom": 0,
  "is_hidden": 0,
  "label": "Hotel PMS",
@@ -57,6 +57,18 @@
    "type": "Link",
    "link_type": "Page",
    "link_to": "room-board"
+  },
+  {
+   "label": "Room Planning",
+   "type": "Link",
+   "link_type": "Page",
+   "link_to": "room-planning"
+  },
+  {
+   "label": "Test Data Manager",
+   "type": "Link",
+   "link_type": "Page",
+   "link_to": "hotel-pms-test-data"
   },
   {
    "label": "Reservation Calendar",
@@ -168,7 +180,7 @@
   {
    "color": "Green",
    "format": "{} Active",
-   "label": "Stays",
+   "label": "Active Stays",
    "link_to": "Hotel Stay",
    "stats_filter": "{\"status\": \"Active\"}",
    "type": "DocType"
@@ -182,9 +194,9 @@
    "type": "DocType"
   },
   {
-   "color": "Purple",
+   "color": "Red",
    "format": "{} Open",
-   "label": "Folio Charges",
+   "label": "Open Folios",
    "link_to": "Hotel Folio",
    "stats_filter": "{\"status\": [\"in\", [\"Open\", \"Partially Paid\"]]}",
    "type": "DocType"
@@ -197,8 +209,8 @@
   },
   {
    "color": "Orange",
-   "label": "Room Planning",
-   "link_to": "room-planning",
+   "label": "Room Board",
+   "link_to": "room-board",
    "type": "Page"
   }
  ],
