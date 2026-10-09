@@ -58,6 +58,29 @@ class HotelDashboard {
   <div class="hd-section-label mt-4">${__("Financial")}</div>
   <div class="row hd-row" id="hd-financial"></div>
 
+  <!-- ── charts ───────────────────────────────────────── -->
+  <div class="hd-section-label mt-4">${__("Analytics")}</div>
+  <div class="row hd-row" id="hd-charts">
+    <div class="col-lg-4 col-12" style="padding:0 6px 12px;">
+      <div class="hd-chart-card">
+        <div class="hd-chart-title">${__("Room Status")}</div>
+        <div id="hd-chart-rooms" style="height:200px;"></div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-12" style="padding:0 6px 12px;">
+      <div class="hd-chart-card">
+        <div class="hd-chart-title">${__("Reservations by Status")}</div>
+        <div id="hd-chart-res" style="height:200px;"></div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-12" style="padding:0 6px 12px;">
+      <div class="hd-chart-card">
+        <div class="hd-chart-title">${__("Revenue – Last 14 Days")}</div>
+        <div id="hd-chart-rev" style="height:200px;"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- ── quick actions ─────────────────────────────────── -->
   <div class="hd-section-label mt-4">${__("Quick Actions")}</div>
   <div class="row hd-row" id="hd-actions"></div>
@@ -124,6 +147,21 @@ class HotelDashboard {
   box-shadow: 0 1px 6px rgba(0,0,0,.08);
 }
 .hd-action-btn i { font-size: 18px; }
+.hd-chart-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 14px 16px;
+  height: 100%;
+}
+.hd-chart-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
 </style>
 `);
 	}
@@ -141,6 +179,7 @@ class HotelDashboard {
 		this._rooms(d.rooms);
 		this._reservations(d.reservations);
 		this._financial(d.financial);
+		this._charts(d);
 		this._actions();
 	}
 
@@ -217,6 +256,169 @@ class HotelDashboard {
 			this._card({ label: __("Payments This Month"),  value: fmt(fin.month_payments),       color: "teal",   icon: "fa fa-coins",                 cols: "col-xl-3 col-md-6 col-12" }),
 		];
 		this._inject("#hd-financial", cards);
+	}
+
+	// ── charts ────────────────────────────────────────────────────────────────
+	_charts(d) {
+		this._chart_rooms(d.rooms || {});
+		this._chart_reservations(d.reservations || {});
+		// revenue chart requires its own async call
+		frappe.call({
+			method: "hotel_pms.hotel.api.get_revenue_trend",
+			callback: r => r.message && this._chart_revenue(r.message),
+		});
+	}
+
+	_chart_rooms(r) {
+		const el = this.wrapper.find("#hd-chart-rooms")[0];
+		if (!el) return;
+		const labels = [__("Available"), __("Occupied"), __("Reserved"), __("Cleaning"), __("Maintenance"), __("Out of Service")];
+		const values = [r.available||0, r.occupied||0, r.reserved||0, r.cleaning||0, r.maintenance||0, r.out_of_service||0];
+		const colors = ["#2da44e","#e36209","#1f6feb","#8b5cf6","#f85149","#6e7681"];
+		this._donut(el, labels, values, colors);
+	}
+
+	_chart_reservations(res) {
+		const el = this.wrapper.find("#hd-chart-res")[0];
+		if (!el) return;
+		const labels = [__("Draft"), __("Confirmed"), __("Checked In"), __("Completed"), __("Cancelled"), __("No Show")];
+		const values = [res.draft||0, res.confirmed||0, res.checked_in||0, res.completed||0, res.cancelled||0, res.no_show||0];
+		const colors = ["#6e7681","#1f6feb","#2da44e","#2ea8a8","#f85149","#e36209"];
+		this._bar(el, labels, values, colors);
+	}
+
+	_chart_revenue(data) {
+		const el = this.wrapper.find("#hd-chart-rev")[0];
+		if (!el) return;
+		this._line(el, data.labels || [], data.values || []);
+	}
+
+	// ── chart renderers (plain Canvas — no extra dependency) ──────────────────
+	_donut(el, labels, values, colors) {
+		el.innerHTML = "";
+		const total = values.reduce((a,b) => a+b, 0);
+		const size = Math.min(el.offsetWidth || 220, el.offsetHeight || 200);
+		const canvas = document.createElement("canvas");
+		canvas.width  = size;
+		canvas.height = size - 10;
+		el.appendChild(canvas);
+		const ctx = canvas.getContext("2d");
+		const cx = canvas.width / 2, cy = canvas.height / 2, R = Math.min(cx, cy) - 24;
+		const r2 = R * 0.52;
+		let angle = -Math.PI / 2;
+		values.forEach((v, i) => {
+			if (!v) return;
+			const slice = (v / Math.max(total, 1)) * 2 * Math.PI;
+			ctx.beginPath(); ctx.moveTo(cx, cy);
+			ctx.arc(cx, cy, R, angle, angle + slice);
+			ctx.closePath(); ctx.fillStyle = colors[i]; ctx.fill();
+			angle += slice;
+		});
+		ctx.beginPath(); ctx.arc(cx, cy, r2, 0, 2 * Math.PI);
+		ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--card-bg") || "#fff";
+		ctx.fill();
+		// centre text
+		ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--text-color") || "#000";
+		ctx.font = `bold ${Math.round(R*0.32)}px var(--font-stack, sans-serif)`;
+		ctx.textAlign = "center"; ctx.textBaseline = "middle";
+		ctx.fillText(total, cx, cy);
+		// legend below
+		const legY = cy + R + 8;
+		const nonZero = labels.filter((_, i) => values[i] > 0);
+		const cols = Math.min(nonZero.length, 3);
+		let li = 0;
+		labels.forEach((lbl, i) => {
+			if (!values[i]) return;
+			const col = li % cols, row = Math.floor(li / cols);
+			const lx = (col / cols) * canvas.width + 8;
+			const ly = legY + row * 14;
+			if (ly + 12 > canvas.height) { li++; return; }
+			ctx.fillStyle = colors[i]; ctx.fillRect(lx, ly, 9, 9);
+			ctx.fillStyle = "#888"; ctx.font = "10px var(--font-stack, sans-serif)";
+			ctx.textAlign = "left"; ctx.textBaseline = "top";
+			ctx.fillText(`${lbl} ${values[i]}`, lx + 13, ly);
+			li++;
+		});
+	}
+
+	_bar(el, labels, values, colors) {
+		el.innerHTML = "";
+		const W = el.offsetWidth || 300, H = el.offsetHeight || 200;
+		const canvas = document.createElement("canvas");
+		canvas.width = W; canvas.height = H;
+		el.appendChild(canvas);
+		const ctx = canvas.getContext("2d");
+		const padL = 8, padR = 8, padT = 10, padB = 40;
+		const bW = (W - padL - padR) / labels.length;
+		const max = Math.max(...values, 1);
+		const tc = getComputedStyle(document.documentElement).getPropertyValue("--text-muted") || "#888";
+		values.forEach((v, i) => {
+			const bH = ((v / max) * (H - padT - padB)) || 0;
+			const x  = padL + i * bW + bW * 0.1;
+			const y  = H - padB - bH;
+			ctx.fillStyle = colors[i];
+			ctx.fillRect(x, y, bW * 0.8, bH);
+			if (v > 0) {
+				ctx.fillStyle = colors[i];
+				ctx.font = "bold 11px var(--font-stack, sans-serif)";
+				ctx.textAlign = "center";
+				ctx.fillText(v, x + bW * 0.4, y - 4);
+			}
+			ctx.fillStyle = tc;
+			ctx.font = "9px var(--font-stack, sans-serif)";
+			ctx.textAlign = "center"; ctx.textBaseline = "top";
+			const lbl = labels[i].length > 8 ? labels[i].slice(0,7)+"…" : labels[i];
+			ctx.fillText(lbl, x + bW * 0.4, H - padB + 4);
+		});
+	}
+
+	_line(el, labels, values) {
+		el.innerHTML = "";
+		const W = el.offsetWidth || 300, H = el.offsetHeight || 200;
+		const canvas = document.createElement("canvas");
+		canvas.width = W; canvas.height = H;
+		el.appendChild(canvas);
+		const ctx = canvas.getContext("2d");
+		const padL = 44, padR = 10, padT = 12, padB = 30;
+		const max = Math.max(...values, 1);
+		const pts = values.map((v, i) => ({
+			x: padL + (i / Math.max(labels.length - 1, 1)) * (W - padL - padR),
+			y: padT + (1 - v / max) * (H - padT - padB),
+		}));
+		// grid lines
+		ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--border-color") || "#eee";
+		ctx.lineWidth = 1;
+		[0, 0.25, 0.5, 0.75, 1].forEach(pct => {
+			const y = padT + pct * (H - padT - padB);
+			ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W - padR, y); ctx.stroke();
+			// y-axis label
+			ctx.fillStyle = "#888";
+			ctx.font = "9px var(--font-stack, sans-serif)";
+			ctx.textAlign = "right"; ctx.textBaseline = "middle";
+			ctx.fillText(Math.round(max * (1 - pct)).toLocaleString(), padL - 4, y);
+		});
+		// line + fill
+		ctx.beginPath();
+		pts.forEach((p, i) => i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y));
+		ctx.strokeStyle = C.teal; ctx.lineWidth = 2; ctx.stroke();
+		// area fill
+		ctx.lineTo(pts[pts.length-1].x, H - padB);
+		ctx.lineTo(pts[0].x, H - padB); ctx.closePath();
+		ctx.fillStyle = C.teal + "22"; ctx.fill();
+		// x-axis labels (every ~3 points)
+		const step = Math.ceil(labels.length / 7);
+		labels.forEach((lbl, i) => {
+			if (i % step !== 0 && i !== labels.length - 1) return;
+			ctx.fillStyle = "#888";
+			ctx.font = "9px var(--font-stack, sans-serif)";
+			ctx.textAlign = "center"; ctx.textBaseline = "top";
+			ctx.fillText(lbl.slice(5), pts[i].x, H - padB + 4); // "MM-DD"
+		});
+		// dots
+		pts.forEach(p => {
+			ctx.beginPath(); ctx.arc(p.x, p.y, 3, 0, 2*Math.PI);
+			ctx.fillStyle = C.teal; ctx.fill();
+		});
 	}
 
 	_actions() {

@@ -1,0 +1,15 @@
+{
+ "doctype": "Page",
+ "module": "Hotel",
+ "name": "room-board",
+ "page_name": "room-board",
+ "roles": [
+  {"role": "Hotel Manager"},
+  {"role": "Front Desk"},
+  {"role": "Housekeeping"},
+  {"role": "System Manager"}
+ ],
+ "standard": "Yes",
+ "system_page": 0,
+ "title": "Room Board"
+}

@@ -56,7 +56,7 @@
    "label": "Room Board",
    "type": "Link",
    "link_type": "Page",
-   "link_to": "room-planning"
+   "link_to": "room-board"
   },
   {
    "label": "Reservation Calendar",

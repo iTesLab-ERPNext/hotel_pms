@@ -1,4 +1,5 @@
 app_name        = "hotel_pms"
+commands        = ["hotel_pms.hotel.commands"]
 app_title       = "Hotel PMS"
 app_publisher   = "Hotel PMS"
 app_description = "Hotel Property Management System"

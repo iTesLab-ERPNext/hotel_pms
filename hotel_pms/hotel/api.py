@@ -83,6 +83,49 @@ def get_dashboard_data():
 # ── Availability ───────────────────────────────────────────────────────────────
 
 @frappe.whitelist()
+def get_room_board_data():
+    """Return all rooms enriched with current stay/guest/balance for Room Board."""
+    rooms = frappe.get_all(
+        "Hotel Room",
+        filters={"active": 1},
+        fields=["name", "room_number", "room_name", "room_type", "floor",
+                "capacity", "status", "housekeeping_status", "base_rate"],
+        order_by="floor asc, room_number asc",
+    )
+
+    # Active stays: room → stay name + guest name + balance
+    active_stays = frappe.db.sql("""
+        SELECT
+            hs.room,
+            hs.name   AS stay,
+            hs.guest_name,
+            hf.balance
+        FROM `tabHotel Stay` hs
+        LEFT JOIN `tabHotel Folio` hf ON hf.stay = hs.name
+        WHERE hs.status = 'Active'
+    """, as_dict=True)
+    stay_map = {s.room: s for s in active_stays}
+
+    # Room type names
+    type_names = {
+        rt["name"]: rt["room_type"]
+        for rt in frappe.get_all("Hotel Room Type", fields=["name", "room_type"])
+    }
+
+    result = []
+    for r in rooms:
+        stay_info = stay_map.get(r.name, frappe._dict())
+        result.append({
+            **r,
+            "room_type_name": type_names.get(r.room_type, r.room_type),
+            "stay":       stay_info.get("stay"),
+            "guest_name": stay_info.get("guest_name"),
+            "balance":    float(stay_info.get("balance") or 0),
+        })
+    return result
+
+
+@frappe.whitelist()
 def get_room_availability(arrival_date, departure_date, room_type=None):
     """Return rooms available for the given date range."""
     filters = {"active": 1}
@@ -263,3 +306,22 @@ def create_payment(customer, amount, payment_method, payment_type="Partial",
 @frappe.whitelist()
 def update_housekeeping_status(room, new_status, notes=None):
     return lifecycle.update_housekeeping_status(room, new_status, notes)
+
+
+# ── Revenue trend ──────────────────────────────────────────────────────────────
+
+@frappe.whitelist()
+def get_revenue_trend(days=14):
+    """Return daily payment totals for the last N days (for the dashboard line chart)."""
+    today = nowdate()
+    labels, values = [], []
+    for i in range(int(days) - 1, -1, -1):
+        day = add_days(today, -i)
+        total = frappe.db.sql("""
+            SELECT COALESCE(SUM(amount), 0)
+            FROM `tabHotel Payment`
+            WHERE payment_date = %s AND docstatus != 2
+        """, day)[0][0] or 0
+        labels.append(str(day))
+        values.append(float(total))
+    return {"labels": labels, "values": values}
