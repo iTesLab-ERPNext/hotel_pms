@@ -223,8 +223,8 @@ class HotelDashboard {
 		const actions = [
 			{ label: __("New Reservation"), icon: "fa fa-plus-circle",       fn: () => frappe.new_doc("Hotel Reservation") },
 			{ label: __("New Customer"),    icon: "fa fa-user-plus",          fn: () => frappe.new_doc("Hotel Customer") },
-			{ label: __("Room Board"),      icon: "fa fa-th-large",           fn: () => frappe.set_route("room-board") },
 			{ label: __("Room Planning"),   icon: "fa fa-calendar-alt",       fn: () => frappe.set_route("room-planning") },
+			{ label: __("Calendar"),        icon: "fa fa-calendar",           fn: () => frappe.set_route("List","Hotel Reservation","Calendar") },
 			{ label: __("Housekeeping"),    icon: "fa fa-broom",              fn: () => frappe.set_route("List","Hotel Housekeeping") },
 			{ label: __("Payments"),        icon: "fa fa-money-bill-wave",    fn: () => frappe.set_route("List","Hotel Payment") },
 			{ label: __("Folios"),          icon: "fa fa-file-invoice-dollar",fn: () => frappe.set_route("List","Hotel Folio") },

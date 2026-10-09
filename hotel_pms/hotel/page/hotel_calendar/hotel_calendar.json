@@ -1,0 +1,19 @@
+{
+ "creation": "2026-10-09 00:00:00.000000",
+ "doctype": "Page",
+ "icon": "fa fa-calendar-alt",
+ "modified": "2026-10-09 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Hotel",
+ "name": "hotel-calendar",
+ "owner": "Administrator",
+ "page_name": "hotel-calendar",
+ "restrict_to_domain": null,
+ "roles": [
+  {"role": "Hotel Manager"},
+  {"role": "Front Desk"},
+  {"role": "System Manager"}
+ ],
+ "standard": "Yes",
+ "title": "Hotel Calendar"
+}

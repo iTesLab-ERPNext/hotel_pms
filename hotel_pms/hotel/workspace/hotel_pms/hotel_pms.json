@@ -2,7 +2,7 @@
  "doctype": "Workspace",
  "category": "Modules",
  "charts": [],
- "content": "[{\"id\":\"shortcut-section\",\"type\":\"shortcut\"},{\"id\":\"card-masters\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\"}},{\"id\":\"card-operations\",\"type\":\"card\",\"data\":{\"card_name\":\"Operations\"}}]",
+ "content": "[{\"id\":\"shortcuts\",\"type\":\"shortcut\"},{\"id\":\"card-masters\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\"}},{\"id\":\"card-dashboards\",\"type\":\"card\",\"data\":{\"card_name\":\"Dashboards\"}},{\"id\":\"card-reports\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\"}}]",
  "hide_custom": 0,
  "is_hidden": 0,
  "label": "Hotel PMS",
@@ -39,6 +39,72 @@
    "type": "Link",
    "link_type": "DocType",
    "link_to": "Hotel Service"
+  },
+  {
+   "label": "Dashboards",
+   "type": "Card Break",
+   "icon": null,
+   "hidden": null
+  },
+  {
+   "label": "Hotel Dashboard",
+   "type": "Link",
+   "link_type": "Page",
+   "link_to": "hotel-pms-dashboard"
+  },
+  {
+   "label": "Room Board",
+   "type": "Link",
+   "link_type": "Page",
+   "link_to": "room-planning"
+  },
+  {
+   "label": "Reservation Calendar",
+   "type": "Link",
+   "link_type": "DocType",
+   "link_to": "Hotel Reservation"
+  },
+  {
+   "label": "Reports",
+   "type": "Card Break",
+   "icon": null,
+   "hidden": null
+  },
+  {
+   "label": "Daily Room Occupancy",
+   "type": "Link",
+   "link_type": "Report",
+   "link_to": "Daily Room Occupancy"
+  },
+  {
+   "label": "Arrivals and Departures",
+   "type": "Link",
+   "link_type": "Report",
+   "link_to": "Arrivals and Departures"
+  },
+  {
+   "label": "In-House Guest Folio Summary",
+   "type": "Link",
+   "link_type": "Report",
+   "link_to": "In-House Guest Folio Summary"
+  },
+  {
+   "label": "Housekeeping Status Board",
+   "type": "Link",
+   "link_type": "Report",
+   "link_to": "Housekeeping Status Board"
+  },
+  {
+   "label": "Service Request Report",
+   "type": "Link",
+   "link_type": "Report",
+   "link_to": "Service Request Report"
+  },
+  {
+   "label": "Revenue by Charge Type",
+   "type": "Link",
+   "link_type": "Report",
+   "link_to": "Revenue by Charge Type"
   },
   {
    "label": "Operations",
@@ -83,46 +149,16 @@
  "owner": "Administrator",
  "public": 1,
  "roles": [
-  {
-   "role": "Hotel Manager"
-  },
-  {
-   "role": "Front Desk"
-  },
-  {
-   "role": "Cashier"
-  },
-  {
-   "role": "Housekeeping"
-  },
-  {
-   "role": "System Manager"
-  }
+  {"role": "Hotel Manager"},
+  {"role": "Front Desk"},
+  {"role": "Cashier"},
+  {"role": "Housekeeping"},
+  {"role": "System Manager"}
  ],
  "sequence_id": 1,
  "shortcuts": [
   {
    "color": "Blue",
-   "label": "Dashboard",
-   "link_to": "hotel-pms-dashboard",
-   "type": "Page"
-  },
-  {
-   "color": "Purple",
-   "label": "Room Planning",
-   "link_to": "room-planning",
-   "type": "Page"
-  },
-  {
-   "color": "Green",
-   "format": "{} Available",
-   "label": "Available Rooms",
-   "link_to": "Hotel Room",
-   "stats_filter": "{\"status\": \"Available\"}",
-   "type": "DocType"
-  },
-  {
-   "color": "Orange",
    "format": "{} Confirmed",
    "label": "Reservations",
    "link_to": "Hotel Reservation",
@@ -130,26 +166,40 @@
    "type": "DocType"
   },
   {
-   "color": "Blue",
+   "color": "Green",
    "format": "{} Active",
-   "label": "Active Stays",
+   "label": "Stays",
    "link_to": "Hotel Stay",
    "stats_filter": "{\"status\": \"Active\"}",
    "type": "DocType"
   },
   {
-   "color": "Red",
+   "color": "Yellow",
+   "format": "{} Pending",
+   "label": "Housekeeping",
+   "link_to": "Hotel Housekeeping",
+   "stats_filter": "{\"status\": [\"in\", [\"Pending\", \"In Progress\"]]}",
+   "type": "DocType"
+  },
+  {
+   "color": "Purple",
    "format": "{} Open",
-   "label": "Open Folios",
+   "label": "Folio Charges",
    "link_to": "Hotel Folio",
    "stats_filter": "{\"status\": [\"in\", [\"Open\", \"Partially Paid\"]]}",
    "type": "DocType"
   },
   {
-   "color": "Yellow",
-   "label": "Housekeeping",
-   "link_to": "Hotel Housekeeping",
-   "type": "DocType"
+   "color": "Teal",
+   "label": "Hotel Dashboard",
+   "link_to": "hotel-pms-dashboard",
+   "type": "Page"
+  },
+  {
+   "color": "Orange",
+   "label": "Room Planning",
+   "link_to": "room-planning",
+   "type": "Page"
   }
  ],
  "title": "Hotel PMS"

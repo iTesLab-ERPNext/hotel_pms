@@ -189,10 +189,84 @@ def ensure_demo_customers() -> None:
     frappe.logger().info("Hotel PMS: demo customers created")
 
 
+def ensure_demo_reservations() -> None:
+    """Seed demo reservations — skipped if any reservations already exist."""
+    if frappe.db.count("Hotel Reservation") > 0:
+        return
+
+    from frappe.utils import add_days, nowdate
+    today = nowdate()
+
+    rooms = frappe.get_all(
+        "Hotel Room", filters={"active": 1},
+        fields=["name", "room_type", "base_rate"], limit=8)
+    customers = frappe.get_all(
+        "Hotel Customer", filters={"active": 1},
+        fields=["name", "first_name", "last_name"], limit=6)
+
+    if not rooms or not customers:
+        frappe.logger().info("Hotel PMS: skipping demo reservations — no rooms/customers yet")
+        return
+
+    # (customer_idx, room_idx, arrival_offset_days, nights, status)
+    plan = [
+        (0, 0,  0,  3, "Checked In"),   # arriving today
+        (1, 1,  2,  2, "Confirmed"),
+        (2, 2,  4,  4, "Confirmed"),
+        (3, 3,  6,  3, "Confirmed"),
+        (4, 4,  10, 5, "Confirmed"),
+        (5, 5,  14, 2, "Confirmed"),
+        (0, 6,  20, 7, "Confirmed"),
+        (1, 7,  25, 3, "Confirmed"),
+    ]
+
+    # Try to detect the child table fieldname for rooms
+    child_field = "rooms"
+    try:
+        meta = frappe.get_meta("Hotel Reservation")
+        for df in meta.get_table_fields():
+            if df.options == "Hotel Reservation Room":
+                child_field = df.fieldname
+                break
+    except Exception:
+        pass
+
+    for (ci, ri, offset, nights, status) in plan:
+        if ci >= len(customers) or ri >= len(rooms):
+            continue
+        try:
+            customer = customers[ci]
+            room = rooms[ri]
+            arrival   = add_days(today, offset)
+            departure = add_days(arrival, nights)
+            rate = float(room.base_rate or 1000)
+
+            res_doc = frappe.get_doc({
+                "doctype": "Hotel Reservation",
+                "customer": customer.name,
+                "arrival_date": arrival,
+                "departure_date": departure,
+                "number_of_nights": nights,
+                "status": status,
+                child_field: [{
+                    "room": room.name,
+                    "room_type": room.room_type,
+                    "rate_per_night": rate,
+                    "total_amount": rate * nights,
+                }],
+            })
+            res_doc.insert(ignore_permissions=True)
+        except Exception as e:
+            frappe.logger().warning(f"Hotel PMS: demo reservation skipped — {e}")
+
+    frappe.logger().info("Hotel PMS: demo reservations created")
+
+
 def run() -> None:
     """Full setup — called from after_migrate."""
     ensure_roles()
     ensure_masters()
     ensure_demo_rooms()
     ensure_demo_customers()
+    ensure_demo_reservations()
     frappe.db.commit()
