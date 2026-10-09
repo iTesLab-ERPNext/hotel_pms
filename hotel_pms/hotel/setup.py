@@ -119,21 +119,21 @@ def before_uninstall() -> None:
     """Remove seed data created by this app."""
     for cat in CUSTOMER_CATEGORIES:
         if frappe.db.exists("Hotel Customer Category", cat):
-            frappe.delete_doc("Hotel Customer Category", cat, ignore_permissions=True)
+            frappe.delete_doc("Hotel Customer Category", cat, ignore_permissions=True, force=True)
 
     for ft in FAMILY_TYPES:
         if frappe.db.exists("Hotel Family Type", ft):
-            frappe.delete_doc("Hotel Family Type", ft, ignore_permissions=True)
+            frappe.delete_doc("Hotel Family Type", ft, ignore_permissions=True, force=True)
 
     for rt in ROOM_TYPES:
         name = rt["room_type"]
         if frappe.db.exists("Hotel Room Type", name):
-            frappe.delete_doc("Hotel Room Type", name, ignore_permissions=True)
+            frappe.delete_doc("Hotel Room Type", name, ignore_permissions=True, force=True)
 
     for svc in SERVICES:
         name = svc["service_name"]
         if frappe.db.exists("Hotel Service", name):
-            frappe.delete_doc("Hotel Service", name, ignore_permissions=True)
+            frappe.delete_doc("Hotel Service", name, ignore_permissions=True, force=True)
 
     # Roles are shared system records linked to DocType permissions;
     # Frappe blocks deletion while those links exist. Disable instead.
