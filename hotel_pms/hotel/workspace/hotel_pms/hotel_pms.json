@@ -124,37 +124,43 @@
    "label": "Daily Room Occupancy",
    "type": "Link",
    "link_type": "Report",
-   "link_to": "Daily Room Occupancy"
+   "link_to": "Daily Room Occupancy",
+   "is_query_report": 1
   },
   {
    "label": "Arrivals and Departures",
    "type": "Link",
    "link_type": "Report",
-   "link_to": "Arrivals and Departures"
+   "link_to": "Arrivals and Departures",
+   "is_query_report": 1
   },
   {
    "label": "In-House Guest Folio Summary",
    "type": "Link",
    "link_type": "Report",
-   "link_to": "In-House Guest Folio Summary"
+   "link_to": "In-House Guest Folio Summary",
+   "is_query_report": 1
   },
   {
    "label": "Housekeeping Status Board",
    "type": "Link",
    "link_type": "Report",
-   "link_to": "Housekeeping Status Board"
+   "link_to": "Housekeeping Status Board",
+   "is_query_report": 1
   },
   {
    "label": "Service Request Report",
    "type": "Link",
    "link_type": "Report",
-   "link_to": "Service Request Report"
+   "link_to": "Service Request Report",
+   "is_query_report": 1
   },
   {
    "label": "Revenue by Charge Type",
    "type": "Link",
    "link_type": "Report",
-   "link_to": "Revenue by Charge Type"
+   "link_to": "Revenue by Charge Type",
+   "is_query_report": 1
   }
  ],
  "module": "Hotel",
@@ -218,37 +224,43 @@
    "color": "Blue",
    "label": "Daily Occupancy",
    "link_to": "Daily Room Occupancy",
-   "type": "Report"
+   "type": "Report",
+   "is_query_report": 1
   },
   {
    "color": "Green",
    "label": "Arrivals & Departures",
    "link_to": "Arrivals and Departures",
-   "type": "Report"
+   "type": "Report",
+   "is_query_report": 1
   },
   {
    "color": "Purple",
    "label": "In-House Folios",
    "link_to": "In-House Guest Folio Summary",
-   "type": "Report"
+   "type": "Report",
+   "is_query_report": 1
   },
   {
    "color": "Yellow",
    "label": "Housekeeping Board",
    "link_to": "Housekeeping Status Board",
-   "type": "Report"
+   "type": "Report",
+   "is_query_report": 1
   },
   {
    "color": "Red",
    "label": "Service Requests",
    "link_to": "Service Request Report",
-   "type": "Report"
+   "type": "Report",
+   "is_query_report": 1
   },
   {
    "color": "Orange",
    "label": "Revenue by Type",
    "link_to": "Revenue by Charge Type",
-   "type": "Report"
+   "type": "Report",
+   "is_query_report": 1
   }
  ],
  "title": "Hotel PMS"
