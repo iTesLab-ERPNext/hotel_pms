@@ -7,7 +7,7 @@
  "doctype": "Dashboard Chart",
  "document_type": "Hotel Stay",
  "dynamic_filters_json": "[]",
- "filters_json": "[{\"fieldname\": \"status\", \"operator\": \"=\", \"value\": \"Active\"}]",
+ "filters_json": "[[\"Hotel Stay\", \"status\", \"=\", \"Active\"]]",
  "is_public": 1,
  "is_standard": 1,
  "module": "Hotel",
